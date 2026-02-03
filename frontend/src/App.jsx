@@ -16,16 +16,11 @@ import Chubba from './pages/Chubba';
 
 /* 
   -------------------------------------------------------------
-  ASSET CONFIGURATION (SOURCE IMPORTS)
+  ASSET CONFIGURATION (VERCEL / PUBLIC FOLDER)
   -------------------------------------------------------------
-  Migrated to src/assets for reliable bundling.
+  Standard Public Folder Serving.
+  Files must be in /public/assets/.
 */
-import vid from './assets/vid.mp4';
-import img1 from './assets/image1.jpg';
-import img2 from './assets/image2.jpg';
-import img3 from './assets/image3.jpg';
-import img4 from './assets/image4.jpg';
-import img5 from './assets/image5.jpg';
 
 function App() {
   const [entered, setEntered] = useState(false);
@@ -42,15 +37,15 @@ function App() {
     }
   }, [entered]);
 
-  // Assets State (Imported)
+  // Assets State (Standard Public Paths)
   const assets = {
-    chubbaVideo: vid,
+    chubbaVideo: '/assets/vid.mp4',
     gallery: [
-      { src: img1, alt: 'Memory 1' },
-      { src: img2, alt: 'Memory 2' },
-      { src: img3, alt: 'Memory 3' },
-      { src: img4, alt: 'Memory 4' },
-      { src: img5, alt: 'Memory 5' },
+      { src: '/assets/image1.jpg', alt: 'Memory 1' },
+      { src: '/assets/image2.jpg', alt: 'Memory 2' },
+      { src: '/assets/image3.jpg', alt: 'Memory 3' },
+      { src: '/assets/image4.jpg', alt: 'Memory 4' },
+      { src: '/assets/image5.jpg', alt: 'Memory 5' },
     ]
   };
 
@@ -95,7 +90,7 @@ function App() {
           <Gatekeeper key="gatekeeper" onEnter={() => setEntered(true)} />
         </AnimatePresence>
       ) : (
-        <div style={{ position: 'relative', zIndex: 10, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ position: 'relative', zIndex: 10, width: '100%', minHeight: '100dvh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingBottom: '100px' }}>
 
           {/* Header */}
           <motion.div
