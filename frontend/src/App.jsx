@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Heart, MousePointerClick, Cat } from 'lucide-react';
 
-// Modules
+// Modules (Case-Sensitive Imports)
 import TouchEffect from './components/TouchEffect';
 import Starfield from './components/Starfield';
 import Iridescence from './components/Iridescence';
@@ -37,7 +37,7 @@ function App() {
     }
   }, [entered]);
 
-  // Assets State (Standard Public Paths)
+  // Assets State (Standard Public Paths - Absolute)
   const assets = {
     chubbaVideo: '/assets/vid.mp4',
     gallery: [
