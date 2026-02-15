@@ -31,8 +31,8 @@ const VoxelControls = ({ isPlaying, setIsPlaying, position = [0, 0, 0] }) => {
                         <meshStandardMaterial color="#FF4081" transparent opacity={0.8} />
                     </mesh>
 
-                    {/* Icon */}
-                    <group position={[0.5, 0.5, 0.6]}> {/* Offset to center 5x5 grid */}
+                    {/* Icon - Centered on top of the base */}
+                    <group position={[2, 2, 2.6]}>
                         <VoxelBuilder
                             matrix={isPlaying ? PAUSE_VOXEL : PLAY_VOXEL}
                             colorPalette={PALETTES.controls}
