@@ -9,7 +9,7 @@ import VoxelConsole from './3d/VoxelConsole';
 const MusicPlayer3D = () => {
     // Isometric settings: Orthographic camera + specific rotation
     return (
-        <div style={{ width: '100vw', height: '100vh', background: '#ffe4e1' }}>
+        <div style={{ width: '100vw', height: '100vh', background: '#E0F7FA' }}>
             <Canvas shadows dpr={[1, 2]}>
                 {/* Isometric Camera View */}
                 <OrthographicCamera
@@ -21,7 +21,7 @@ const MusicPlayer3D = () => {
                     onUpdate={c => c.lookAt(0, 0, 0)}
                 />
 
-                <ambientLight intensity={0.7} color="#ffc0cb" />
+                <ambientLight intensity={0.7} color="#E1F5FE" />
                 <directionalLight
                     position={[10, 20, 5]}
                     intensity={1.5}
@@ -38,7 +38,7 @@ const MusicPlayer3D = () => {
                         <FloatingItems />
                     </group>
 
-                    <ContactShadows resolution={1024} scale={50} blur={2} opacity={0.25} far={10} color="#8a2be2" />
+                    <ContactShadows resolution={1024} scale={50} blur={2} opacity={0.25} far={10} color="#0288D1" />
                     <Environment preset="city" />
                 </Suspense>
 
@@ -46,7 +46,7 @@ const MusicPlayer3D = () => {
                     enableZoom={true}
                     enablePan={true}
                     autoRotate
-                    autoRotateSpeed={0.5}
+                    autoRotateSpeed={0.3}
                     minZoom={20}
                     maxZoom={100}
                 />

@@ -10,12 +10,12 @@ const HeartVinyl = (props) => {
 
     useFrame((state, delta) => {
         if (group.current) {
-            group.current.rotation.y -= delta * 0.5; // Spin
+            group.current.rotation.y -= delta * 0.2; // Spin slower
         }
     });
 
     return (
-        <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5}>
+        <Float speed={1} rotationIntensity={0.1} floatIntensity={0.3}>
             <group ref={group} {...props}>
                 <VoxelBuilder
                     matrix={HEART_VOXEL}

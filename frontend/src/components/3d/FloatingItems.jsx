@@ -36,17 +36,17 @@ const FloatingItems = () => {
 
     return (
         <group>
-            <VoxelItem matrix={STRAWBERRY_VOXEL} palette={PALETTES.strawberry} position={[3, 2, -2]} speed={2} />
-            <VoxelItem matrix={STRAWBERRY_VOXEL} palette={PALETTES.strawberry} position={[-3, -1, 1]} speed={1.5} rotation={[0, 0, 0.5]} />
+            <VoxelItem matrix={STRAWBERRY_VOXEL} palette={PALETTES.strawberry} position={[3, 2, -2]} speed={1} />
+            <VoxelItem matrix={STRAWBERRY_VOXEL} palette={PALETTES.strawberry} position={[-3, -1, 1]} speed={0.8} rotation={[0, 0, 0.5]} />
 
             {/* Stars need to be 3D array */}
-            <VoxelItem matrix={[STAR_VOXEL[0]]} palette={PALETTES.star} position={[-2, 3, -1]} speed={1} />
-            <VoxelItem matrix={[STAR_VOXEL[0]]} palette={PALETTES.star} position={[2, -3, -2]} speed={0.8} />
+            <VoxelItem matrix={[STAR_VOXEL[0]]} palette={PALETTES.star} position={[-2, 3, -1]} speed={0.5} />
+            <VoxelItem matrix={[STAR_VOXEL[0]]} palette={PALETTES.star} position={[2, -3, -2]} speed={0.4} />
 
             {/* Cat */}
-            <VoxelItem matrix={CAT_VOXEL} palette={PALETTES.cat} position={[0, 3.5, 0]} speed={1.2} />
+            <VoxelItem matrix={CAT_VOXEL} palette={PALETTES.cat} position={[0, 3.5, 0]} speed={0.6} />
 
-            <Sparkles count={40} scale={12} size={6} speed={0.4} opacity={0.6} color="#ffd700" />
+            <Sparkles count={40} scale={12} size={6} speed={0.2} opacity={0.6} color="#B3E5FC" />
         </group>
     );
 };
