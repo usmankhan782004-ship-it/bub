@@ -10,7 +10,7 @@ const MusicPlayer3D = () => {
     // Isometric settings: Orthographic camera + specific rotation
     return (
         <div style={{ width: '100vw', height: '100vh', background: '#E0F7FA' }}>
-            <Canvas shadows dpr={[1, 2]}>
+            <Canvas dpr={[1, 1.5]} performance={{ min: 0.5 }}>
                 {/* Isometric Camera View */}
                 <OrthographicCamera
                     makeDefault
@@ -25,11 +25,9 @@ const MusicPlayer3D = () => {
                 <directionalLight
                     position={[10, 20, 5]}
                     intensity={1.5}
-                    color="#ffd700"
-                    castShadow
-                    shadow-mapSize={[1024, 1024]}
+                    color="#FFFFFF"
                 />
-                <pointLight position={[-10, 5, -10]} intensity={1} color="#00ffff" />
+                <pointLight position={[-10, 5, -10]} intensity={1} color="#4FC3F7" />
 
                 <Suspense fallback={null}>
                     <group position={[0, 0, 0]}>
@@ -38,7 +36,7 @@ const MusicPlayer3D = () => {
                         <FloatingItems />
                     </group>
 
-                    <ContactShadows resolution={1024} scale={50} blur={2} opacity={0.25} far={10} color="#0288D1" />
+                    <ContactShadows frames={1} resolution={512} scale={50} blur={2} opacity={0.25} far={10} color="#0288D1" />
                     <Environment preset="city" />
                 </Suspense>
 
@@ -52,9 +50,8 @@ const MusicPlayer3D = () => {
                 />
 
                 <EffectComposer disableNormalPass>
-                    <Bloom luminanceThreshold={0.6} mipmapBlur intensity={0.8} radius={0.4} />
-                    <TiltShift2 blur={0.1} />
-                    <Noise opacity={0.05} />
+                    <Bloom luminanceThreshold={0.8} mipmapBlur intensity={0.5} radius={0.4} />
+                    <TiltShift2 blur={0.05} />
                     <Vignette eskil={false} offset={0.1} darkness={0.8} />
                 </EffectComposer>
             </Canvas>
