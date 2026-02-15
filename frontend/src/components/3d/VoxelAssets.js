@@ -71,6 +71,27 @@ export const CAT_VOXEL = [
     ]
 ];
 
+export const BLACK_CAT_VOXEL = [
+    // Body/Head Base
+    [
+        [0, 0, 1, 0, 0],
+        [0, 1, 1, 1, 0],
+        [1, 1, 1, 1, 1],
+        [1, 2, 1, 2, 1], // Eyes (2)
+        [1, 1, 1, 1, 1],
+        [0, 1, 1, 1, 0]
+    ],
+    // Ears
+    [
+        [1, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0]
+    ]
+];
+
 // 5x5 Grid for Play Icon (Triangle)
 const PLAY_GRID = [
     [0, 0, 0, 0, 0],
@@ -101,5 +122,6 @@ export const PALETTES = {
     strawberry: { 1: '#ffb7c5', 2: '#90ee90' }, // Pink body, Green leaves
     star: { 1: '#ffd700' }, // Gold
     cat: { 1: '#ffffff' }, // White
+    blackCat: { 1: '#1a1a1a', 2: '#00ff00' }, // Black body, Bright Green eyes
     controls: { 1: '#ffffff' } // White for buttons
 };

@@ -8,9 +8,21 @@ import VoxelConsole from './3d/VoxelConsole';
 import Playlist from './Playlist';
 
 import VoxelControls from './3d/VoxelControls';
-import { Sparkles, Text } from '@react-three/drei';
+import { Sparkles, Text, Float } from '@react-three/drei';
 import SecretNote from './SecretNote';
-import PhotoDraggable from './3d/PhotoDraggable';
+import { BLACK_CAT_VOXEL, PALETTES } from './3d/VoxelAssets';
+import VoxelBuilder from './3d/VoxelBuilder';
+
+const ChubbaCat = ({ onClick }) => {
+    return (
+        <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
+            <group position={[-5, 2, 2]} onClick={onClick} onPointerOver={() => document.body.style.cursor = 'pointer'} onPointerOut={() => document.body.style.cursor = 'auto'}>
+                <VoxelBuilder matrix={BLACK_CAT_VOXEL} palette={PALETTES.blackCat} size={0.6} />
+                <Text position={[0, -1.5, 0]} fontSize={0.3} color="black">Chubba</Text>
+            </group>
+        </Float>
+    );
+};
 
 const MusicPlayer3D = () => {
     const [zoom, setZoom] = useState(25);
@@ -61,19 +73,8 @@ const MusicPlayer3D = () => {
                         {/* Interactive floating items with secret notes */}
                         <FloatingItems onNoteClick={setActiveNote} />
 
-                        {/* Memories / Polaroids */}
-                        <PhotoDraggable
-                            position={[-6, 4, -2]}
-                            rotation={[0, 0.2, -0.1]}
-                            url="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400&q=80"
-                            caption="Our First Date"
-                        />
-                        <PhotoDraggable
-                            position={[6, -3, 2]}
-                            rotation={[0, -0.2, 0.1]}
-                            url="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=400&q=80"
-                            caption="Adventures"
-                        />
+                        {/* Chubba the Black Cat */}
+                        <ChubbaCat onClick={() => setActiveNote('Meow! I am Chubba, your guardian! 🐾')} />
 
                         {/* 3D Controls - Positioned to the right */}
                         <VoxelControls
