@@ -3,16 +3,19 @@ import { Play, Pause, SkipForward, SkipBack, Heart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const songs = [
-    { title: "Perfect", artist: "Ed Sheeran", duration: "4:23" },
-    { title: "Lover", artist: "Taylor Swift", duration: "3:41" },
-    { title: "All of Me", artist: "John Legend", duration: "4:29" },
-    { title: "Just the Way You Are", artist: "Bruno Mars", duration: "3:40" },
-    { title: "Until I Found You", artist: "Stephen Sanchez", duration: "2:57" },
-    { title: "Can't Help Falling in Love", artist: "Elvis Presley", duration: "3:00" }
+    { title: "Perfect", artist: "Ed Sheeran", duration: "4:23", albumArt: "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96" },
+    { title: "Lover", artist: "Taylor Swift", duration: "3:41", albumArt: "https://i.scdn.co/image/ab67616d0000b273e787cffec20aa2a396a61647" },
+    { title: "All of Me", artist: "John Legend", duration: "4:29", albumArt: "https://i.scdn.co/image/ab67616d0000b2736483844627993077e682d334" },
+    { title: "Just the Way You Are", artist: "Bruno Mars", duration: "3:40", albumArt: "https://i.scdn.co/image/ab67616d0000b273e659b0234032c57753238804" },
+    { title: "Until I Found You", artist: "Stephen Sanchez", duration: "2:57", albumArt: "https://i.scdn.co/image/ab67616d0000b2730c471c36970b940e0cf8164e" },
+    { title: "Can't Help Falling in Love", artist: "Elvis Presley", duration: "3:00", albumArt: "https://i.scdn.co/image/ab67616d0000b27320b923a5cfdd24bc5753b827" }
 ];
 
 const Playlist = ({ currentSongIndex, setCurrentSongIndex, isPlaying, setIsPlaying }) => {
     const [isExpanded, setIsExpanded] = useState(false);
+
+    // Placeholder art fallback
+    const currentArt = songs[currentSongIndex].albumArt;
 
     return (
         <motion.div
@@ -33,12 +36,16 @@ const Playlist = ({ currentSongIndex, setCurrentSongIndex, isPlaying, setIsPlayi
                 className="p-4 flex items-center gap-4 cursor-pointer"
                 onClick={() => setIsExpanded(!isExpanded)}
             >
-                {/* Tiny Album Art Placeholder */}
-                <div className={`w-12 h-12 rounded-full bg-gradient-to-tr from-pink-300 to-blue-300 flex items-center justify-center shadow-inner ${isPlaying ? 'animate-spin-slow' : ''}`} style={{ animationDuration: '5s' }}>
-                    <Heart size={16} fill="white" className="text-white drop-shadow-md" />
+                {/* Album Art */}
+                <div className={`w-12 h-12 rounded-md overflow-hidden shadow-md flex-shrink-0 relative ${isPlaying ? 'ring-2 ring-pink-400' : ''}`}>
+                    <img src={currentArt} alt="Album Art" className="w-full h-full object-cover" />
+                    {isPlaying && <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                        <div className="w-3 h-3 bg-white rounded-full animate-pulse" />
+                    </div>}
                 </div>
 
                 <div className="flex-1 min-w-0">
+                    <p className="text-[10px] font-bold text-pink-500 uppercase tracking-wider mb-0.5">Playing for Josephine</p>
                     <h3 className="text-slate-800 font-bold text-sm truncate">{songs[currentSongIndex].title}</h3>
                     <p className="text-slate-600 text-xs truncate">{songs[currentSongIndex].artist}</p>
                 </div>

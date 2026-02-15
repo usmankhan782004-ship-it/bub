@@ -36,15 +36,28 @@ const FloatingItems = () => {
 
     return (
         <group>
-            <VoxelItem matrix={STRAWBERRY_VOXEL} palette={PALETTES.strawberry} position={[3, 2, -2]} speed={1} />
-            <VoxelItem matrix={STRAWBERRY_VOXEL} palette={PALETTES.strawberry} position={[-3, -1, 1]} speed={0.8} rotation={[0, 0, 0.5]} />
+            {/* Strawberry - Sweetness */}
+            <group onClick={(e) => { e.stopPropagation(); onNoteClick("You are the sweetest part of my life, Josephine."); }}>
+                <VoxelItem matrix={STRAWBERRY_VOXEL} palette={PALETTES.strawberry} position={[3, 2, -2]} speed={1} />
+            </group>
 
-            {/* Stars need to be 3D array */}
-            <VoxelItem matrix={[STAR_VOXEL[0]]} palette={PALETTES.star} position={[-2, 3, -1]} speed={0.5} />
-            <VoxelItem matrix={[STAR_VOXEL[0]]} palette={PALETTES.star} position={[2, -3, -2]} speed={0.4} />
+            <group onClick={(e) => { e.stopPropagation(); onNoteClick("Every moment with you is a treat."); }}>
+                <VoxelItem matrix={STRAWBERRY_VOXEL} palette={PALETTES.strawberry} position={[-3, -1, 1]} speed={0.8} rotation={[0, 0, 0.5]} />
+            </group>
 
-            {/* Cat */}
-            <VoxelItem matrix={CAT_VOXEL} palette={PALETTES.cat} position={[0, 3.5, 0]} speed={0.6} />
+            {/* Stars - Shining */}
+            <group onClick={(e) => { e.stopPropagation(); onNoteClick("You shine brighter than any star in my sky."); }}>
+                <VoxelItem matrix={[STAR_VOXEL[0]]} palette={PALETTES.star} position={[-2, 3, -1]} speed={0.5} />
+            </group>
+
+            <group onClick={(e) => { e.stopPropagation(); onNoteClick("My world revolves around you."); }}>
+                <VoxelItem matrix={[STAR_VOXEL[0]]} palette={PALETTES.star} position={[2, -3, -2]} speed={0.4} />
+            </group>
+
+            {/* Cat - Purrfect */}
+            <group onClick={(e) => { e.stopPropagation(); onNoteClick("You're absolutely purr-fect to me!"); }}>
+                <VoxelItem matrix={CAT_VOXEL} palette={PALETTES.cat} position={[0, 3.5, 0]} speed={0.6} />
+            </group>
 
             <Sparkles count={40} scale={12} size={6} speed={0.2} opacity={0.6} color="#B3E5FC" />
         </group>

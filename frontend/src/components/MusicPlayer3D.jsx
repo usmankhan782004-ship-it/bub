@@ -8,12 +8,14 @@ import VoxelConsole from './3d/VoxelConsole';
 import Playlist from './Playlist';
 
 import VoxelControls from './3d/VoxelControls';
-import { Sparkles } from '@react-three/drei';
+import { Sparkles, Text } from '@react-three/drei';
+import SecretNote from './SecretNote';
 
 const MusicPlayer3D = () => {
     const [zoom, setZoom] = useState(25);
     const [currentSongIndex, setCurrentSongIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [activeNote, setActiveNote] = useState(null);
 
     useEffect(() => {
         const handleResize = () => {
@@ -55,7 +57,8 @@ const MusicPlayer3D = () => {
                     <group position={[0, -1, 0]}> {/* Shifted down slightly to center on phone */}
                         <HeartVinyl position={[0, 1, 0]} isPlaying={isPlaying} />
                         <VoxelConsole />
-                        <FloatingItems />
+                        {/* Interactive floating items with secret notes */}
+                        <FloatingItems onNoteClick={setActiveNote} />
 
                         {/* 3D Controls - Positioned to the right */}
                         <VoxelControls
@@ -63,6 +66,19 @@ const MusicPlayer3D = () => {
                             setIsPlaying={setIsPlaying}
                             position={[8, 0, 0]}
                         />
+
+                        {/* Marquee for Josephine */}
+                        <Text
+                            position={[0, 4, -4]}
+                            fontSize={1.5}
+                            color="#E91E63"
+                            anchorX="center"
+                            anchorY="middle"
+                            font="https://fonts.gstatic.com/s/pressstart2p/v14/e3t4euO8mT-gSK7De23ABF1W9w.woff" // Pixel font for header
+                            fillOpacity={0.8}
+                        >
+                            FOR JOSEPHINE
+                        </Text>
 
                         {/* Particle Effects when Playing */}
                         {isPlaying && (
@@ -105,6 +121,9 @@ const MusicPlayer3D = () => {
                 isPlaying={isPlaying}
                 setIsPlaying={setIsPlaying}
             />
+
+            {/* Secret Notes Overlay */}
+            <SecretNote note={activeNote} onClose={() => setActiveNote(null)} />
         </div>
     );
 };
