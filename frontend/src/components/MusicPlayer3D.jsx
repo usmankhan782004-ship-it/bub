@@ -1,58 +1,74 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, OrthographicCamera, ContactShadows } from '@react-three/drei';
-import { EffectComposer, Bloom, TiltShift2, Noise, Vignette } from '@react-three/postprocessing';
+import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import HeartVinyl from './3d/HeartVinyl';
 import FloatingItems from './3d/FloatingItems';
 import VoxelConsole from './3d/VoxelConsole';
 
 const MusicPlayer3D = () => {
-    // Isometric settings: Orthographic camera + specific rotation
+    const [zoom, setZoom] = useState(25);
+
+    useEffect(() => {
+        const handleResize = () => {
+            // iPhone 16 width is approx 393px. 
+            // Logic: Low zoom for small screens to fit content.
+            if (window.innerWidth < 768) {
+                setZoom(18); // Zoom out on mobile
+            } else {
+                setZoom(35); // Normal for desktop
+            }
+        };
+        handleResize(); // Init
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     return (
         <div style={{ width: '100vw', height: '100vh', background: '#E0F7FA' }}>
-            <Canvas dpr={[1, 1.5]} performance={{ min: 0.5 }}>
+            <Canvas dpr={[1, 1.25]} performance={{ min: 0.1 }}> {/* Extremely conservative DPR for smoothness */}
                 {/* Isometric Camera View */}
                 <OrthographicCamera
                     makeDefault
                     position={[20, 20, 20]}
-                    zoom={40}
+                    zoom={zoom}
                     near={-50}
                     far={200}
                     onUpdate={c => c.lookAt(0, 0, 0)}
                 />
 
-                <ambientLight intensity={0.7} color="#E1F5FE" />
+                <ambientLight intensity={0.9} color="#E1F5FE" /> {/* Brightened ambient */}
                 <directionalLight
                     position={[10, 20, 5]}
-                    intensity={1.5}
+                    intensity={1.2}
                     color="#FFFFFF"
                 />
-                <pointLight position={[-10, 5, -10]} intensity={1} color="#4FC3F7" />
+                <pointLight position={[-10, 5, -10]} intensity={0.8} color="#4FC3F7" />
 
                 <Suspense fallback={null}>
-                    <group position={[0, 0, 0]}>
+                    <group position={[0, -1, 0]}> {/* Shifted down slightly to center on phone */}
                         <HeartVinyl position={[0, 1, 0]} />
                         <VoxelConsole />
                         <FloatingItems />
                     </group>
 
-                    <ContactShadows frames={1} resolution={512} scale={50} blur={2} opacity={0.25} far={10} color="#0288D1" />
+                    <ContactShadows frames={1} resolution={256} scale={40} blur={2} opacity={0.2} far={10} color="#0288D1" />
                     <Environment preset="city" />
                 </Suspense>
 
                 <OrbitControls
-                    enableZoom={true}
-                    enablePan={true}
+                    enableZoom={false} // Disable zoom to prevent mess on mobile
+                    enablePan={false}
                     autoRotate
-                    autoRotateSpeed={0.3}
-                    minZoom={20}
-                    maxZoom={100}
+                    autoRotateSpeed={0.5} // slightly faster than 0.3 to feel "alive" but smooth
+                    minPolarAngle={Math.PI / 4}
+                    maxPolarAngle={Math.PI / 2}
                 />
 
                 <EffectComposer disableNormalPass>
-                    <Bloom luminanceThreshold={0.8} mipmapBlur intensity={0.5} radius={0.4} />
-                    <TiltShift2 blur={0.05} />
-                    <Vignette eskil={false} offset={0.1} darkness={0.8} />
+                    {/* Removed TiltShift for performance */}
+                    <Bloom luminanceThreshold={0.85} mipmapBlur intensity={0.3} radius={0.2} />
+                    <Vignette eskil={false} offset={0.1} darkness={0.6} />
                 </EffectComposer>
             </Canvas>
 
