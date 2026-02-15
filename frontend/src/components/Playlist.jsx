@@ -34,23 +34,33 @@ const Playlist = ({ currentSongIndex, setCurrentSongIndex, isPlaying, setIsPlayi
         >
             {/* Spotify Embed Mode */}
             {isSpotifyMode ? (
-                <div className="w-full h-80 relative">
+                <div className="w-full h-80 relative group">
                     <button
                         onClick={() => setIsSpotifyMode(false)}
-                        className="absolute top-2 right-2 z-10 bg-white/50 p-1 rounded-full hover:bg-white text-xs font-bold px-2"
+                        className="absolute top-2 right-2 z-10 bg-white/50 p-1 rounded-full hover:bg-white text-xs font-bold px-2 pointer-events-auto"
                     >
                         Back to Visuals
                     </button>
-                    <iframe
-                        style={{ borderRadius: '12px' }}
-                        src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M?utm_source=generator&theme=0"
-                        width="100%"
-                        height="100%"
-                        frameBorder="0"
-                        allowFullScreen=""
-                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                        loading="lazy"
-                    ></iframe>
+
+                    {/* Helper Overlay - Disappears when user interacts or after delay */}
+                    <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
+                        <div className="bg-black/50 text-white px-4 py-2 rounded-full animate-pulse backdrop-blur-sm">
+                            👆 Click "Play" on Spotify
+                        </div>
+                    </div>
+
+                    <div className="w-full h-full relative z-0">
+                        <iframe
+                            style={{ borderRadius: '12px' }}
+                            src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M?utm_source=generator&theme=0"
+                            width="100%"
+                            height="100%"
+                            frameBorder="0"
+                            allowFullScreen=""
+                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                            loading="lazy"
+                        ></iframe>
+                    </div>
                 </div>
             ) : (
                 <>
