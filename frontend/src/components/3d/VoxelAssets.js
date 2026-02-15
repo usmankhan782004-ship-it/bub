@@ -1,0 +1,79 @@
+export const HEART_GRID = [
+    [
+        [0, 1, 1, 0, 1, 1, 0],
+        [1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1],
+        [0, 1, 1, 1, 1, 1, 0],
+        [0, 0, 1, 1, 1, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0],
+    ]
+];
+
+// Extrude Heart to thickness
+export const HEART_VOXEL = [
+    HEART_GRID[0], // Layer 1
+    HEART_GRID[0], // Layer 2 (Thicker)
+];
+
+
+export const STRAWBERRY_VOXEL = [
+    // Bottom tip
+    [
+        [0, 0, 0],
+        [0, 1, 0],
+        [0, 0, 0]
+    ],
+    // Middle
+    [
+        [0, 1, 0],
+        [1, 1, 1],
+        [0, 1, 0]
+    ],
+    // Top
+    [
+        [1, 1, 1],
+        [1, 1, 1],
+        [1, 1, 1]
+    ],
+    // Leaves (Green = 2)
+    [
+        [0, 2, 0],
+        [2, 2, 2],
+        [0, 2, 0]
+    ]
+];
+
+export const STAR_VOXEL = [
+    [
+        [0, 0, 1, 0, 0],
+        [0, 1, 1, 1, 0],
+        [1, 1, 1, 1, 1],
+        [0, 1, 1, 1, 0],
+        [0, 1, 0, 1, 0]
+    ]
+];
+
+
+export const CAT_VOXEL = [
+    // Head only for simplicity
+    [
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 1], // Eyes gap
+        [1, 1, 0, 1, 1]  // Mouth gap
+    ],
+    [
+        // Ears (Layer 2)
+        [1, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0]
+    ]
+];
+
+export const PALETTES = {
+    heart: { 1: '#ff69b4' }, // Pink
+    strawberry: { 1: '#ffb7c5', 2: '#90ee90' }, // Pink body, Green leaves
+    star: { 1: '#ffd700' }, // Gold
+    cat: { 1: '#ffffff' } // White
+};
