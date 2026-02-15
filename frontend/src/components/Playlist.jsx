@@ -76,10 +76,11 @@ const Playlist = ({ currentSongIndex, setCurrentSongIndex, isPlaying, setIsPlayi
                         </div>
 
                         <button
-                            className="w-10 h-10 rounded-full bg-white/50 hover:bg-white/80 flex items-center justify-center transition-colors"
-                            onClick={(e) => { e.stopPropagation(); setIsPlaying(!isPlaying); }}
+                            className="w-10 h-10 rounded-full bg-white/50 hover:bg-white/80 flex items-center justify-center transition-colors shadow-sm"
+                            onClick={(e) => { e.stopPropagation(); setIsSpotifyMode(true); }}
+                            title="Play Music"
                         >
-                            {isPlaying ? <Pause size={18} className="text-slate-800" /> : <Play size={18} className="text-slate-800 ml-1" />}
+                            <Play size={18} className="text-slate-800 ml-1" />
                         </button>
                     </div>
 
@@ -99,9 +100,9 @@ const Playlist = ({ currentSongIndex, setCurrentSongIndex, isPlaying, setIsPlayi
                                     </button>
                                     <button
                                         className="w-14 h-14 rounded-full bg-gradient-to-r from-pink-400 to-blue-400 flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
-                                        onClick={() => setIsPlaying(!isPlaying)}
+                                        onClick={() => setIsSpotifyMode(true)}
                                     >
-                                        {isPlaying ? <Pause size={24} className="text-white" /> : <Play size={24} className="text-white ml-1" />}
+                                        <Play size={24} className="text-white ml-1" />
                                     </button>
                                     <button className="text-slate-600 hover:text-slate-800 transition-colors" onClick={() => setCurrentSongIndex((prev) => (prev + 1) % songs.length)}>
                                         <SkipForward size={24} />
