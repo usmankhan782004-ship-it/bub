@@ -7,6 +7,9 @@ import FloatingItems from './3d/FloatingItems';
 import VoxelConsole from './3d/VoxelConsole';
 import Playlist from './Playlist';
 
+import VoxelControls from './3d/VoxelControls';
+import { Sparkles } from '@react-three/drei';
+
 const MusicPlayer3D = () => {
     const [zoom, setZoom] = useState(25);
     const [currentSongIndex, setCurrentSongIndex] = useState(0);
@@ -53,6 +56,26 @@ const MusicPlayer3D = () => {
                         <HeartVinyl position={[0, 1, 0]} isPlaying={isPlaying} />
                         <VoxelConsole />
                         <FloatingItems />
+
+                        {/* 3D Controls - Positioned to the right */}
+                        <VoxelControls
+                            isPlaying={isPlaying}
+                            setIsPlaying={setIsPlaying}
+                            position={[8, 0, 0]}
+                        />
+
+                        {/* Particle Effects when Playing */}
+                        {isPlaying && (
+                            <Sparkles
+                                count={50}
+                                scale={12}
+                                size={4}
+                                speed={0.4}
+                                opacity={0.8}
+                                color="#ff69b4"
+                                position={[0, 2, 0]}
+                            />
+                        )}
                     </group>
 
                     <ContactShadows frames={1} resolution={256} scale={40} blur={2} opacity={0.2} far={10} color="#0288D1" />

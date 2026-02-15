@@ -71,9 +71,35 @@ export const CAT_VOXEL = [
     ]
 ];
 
+// 5x5 Grid for Play Icon (Triangle)
+const PLAY_GRID = [
+    [0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 0],
+    [0, 1, 1, 0, 0],
+    [0, 1, 1, 1, 0],
+    [0, 1, 1, 0, 0],
+    [0, 1, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+];
+
+// 5x5 Grid for Pause Icon (Two Bars)
+const PAUSE_GRID = [
+    [0, 0, 0, 0, 0],
+    [0, 1, 0, 1, 0],
+    [0, 1, 0, 1, 0],
+    [0, 1, 0, 1, 0],
+    [0, 1, 0, 1, 0],
+    [0, 1, 0, 1, 0],
+    [0, 0, 0, 0, 0],
+];
+
+export const PLAY_VOXEL = [PLAY_GRID];
+export const PAUSE_VOXEL = [PAUSE_GRID];
+
 export const PALETTES = {
     heart: { 1: '#ff69b4' }, // Pink
     strawberry: { 1: '#ffb7c5', 2: '#90ee90' }, // Pink body, Green leaves
     star: { 1: '#ffd700' }, // Gold
-    cat: { 1: '#ffffff' } // White
+    cat: { 1: '#ffffff' }, // White
+    controls: { 1: '#ffffff' } // White for buttons
 };
