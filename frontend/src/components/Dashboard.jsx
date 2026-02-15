@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Sparkles, Camera, Mail, Map } from 'lucide-react';
+import { Sparkles, Camera, Mail, Map, Music } from 'lucide-react';
 
 /* 
   Persistent Dock - Final 4-Icon Setup
@@ -110,6 +110,13 @@ const Dashboard = ({ setActiveModule, activeModule }) => {
                     color="#A78BFA"
                     isActive={activeModule === 'connection'}
                     onClick={() => setActiveModule('connection')}
+                />
+                <DashboardTile
+                    icon={<Music size={28} />}
+                    label="Music"
+                    color="#FF69B4"
+                    isActive={activeModule === 'music'}
+                    onClick={() => setActiveModule('music')}
                 />
             </div>
         </motion.nav>

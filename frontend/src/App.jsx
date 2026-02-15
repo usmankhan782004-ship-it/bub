@@ -13,6 +13,7 @@ import About from './pages/About';
 import Message from './pages/Message';
 import Connection from './pages/Connection';
 import Chubba from './pages/Chubba';
+import MusicPlayer3D from './components/MusicPlayer3D';
 
 /* 
   -------------------------------------------------------------
@@ -227,6 +228,12 @@ function App() {
                           videoSrc={assets.chubbaVideo}
                           onClose={() => setActiveModule(null)}
                         />
+                      </div>
+                    )}
+
+                    {activeModule === 'music' && (
+                      <div className="w-full h-full flex items-center justify-center fade-in">
+                        <MusicPlayer3D />
                       </div>
                     )}
                   </div>
