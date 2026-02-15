@@ -49,7 +49,7 @@ const VoxelControls = ({ isPlaying, setIsPlaying, position = [0, 0, 0] }) => {
                 color="#0288D1"
                 anchorX="center"
                 anchorY="middle"
-                font="https://fonts.gstatic.com/s/pressstart2p/v14/e3t4euO8mT-gSK7De23ABF1W9w.woff" // Pixel font if possible, or default
+            // font prop removed to use default font and avoid loading errors
             >
                 {isPlaying ? "PAUSE" : "PLAY"}
             </Text>
