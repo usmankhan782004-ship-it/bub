@@ -16,9 +16,9 @@ import VoxelBuilder from './3d/VoxelBuilder';
 const ChubbaCat = ({ onClick }) => {
     return (
         <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-            <group position={[-5, 2, 2]} onClick={onClick} onPointerOver={() => document.body.style.cursor = 'pointer'} onPointerOut={() => document.body.style.cursor = 'auto'}>
-                <VoxelBuilder matrix={BLACK_CAT_VOXEL} palette={PALETTES.blackCat} size={0.6} />
-                <Text position={[0, -1.5, 0]} fontSize={0.3} color="black">Chubba</Text>
+            <group position={[0, 4, 3]} onClick={onClick} onPointerOver={() => document.body.style.cursor = 'pointer'} onPointerOut={() => document.body.style.cursor = 'auto'}>
+                <VoxelBuilder matrix={BLACK_CAT_VOXEL} palette={PALETTES.blackCat} size={0.8} />
+                <Text position={[0, -1.8, 0]} fontSize={0.4} color="black">Chubba</Text>
             </group>
         </Float>
     );
