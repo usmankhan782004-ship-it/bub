@@ -10,6 +10,7 @@ import Playlist from './Playlist';
 import VoxelControls from './3d/VoxelControls';
 import { Sparkles, Text } from '@react-three/drei';
 import SecretNote from './SecretNote';
+import PhotoDraggable from './3d/PhotoDraggable';
 
 const MusicPlayer3D = () => {
     const [zoom, setZoom] = useState(25);
@@ -59,6 +60,20 @@ const MusicPlayer3D = () => {
                         <VoxelConsole />
                         {/* Interactive floating items with secret notes */}
                         <FloatingItems onNoteClick={setActiveNote} />
+
+                        {/* Memories / Polaroids */}
+                        <PhotoDraggable
+                            position={[-6, 4, -2]}
+                            rotation={[0, 0.2, -0.1]}
+                            url="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400&q=80"
+                            caption="Our First Date"
+                        />
+                        <PhotoDraggable
+                            position={[6, -3, 2]}
+                            rotation={[0, -0.2, 0.1]}
+                            url="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=400&q=80"
+                            caption="Adventures"
+                        />
 
                         {/* 3D Controls - Positioned to the right */}
                         <VoxelControls
