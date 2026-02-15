@@ -4,7 +4,7 @@ import { Float, Text } from '@react-three/drei';
 import VoxelBuilder from './VoxelBuilder';
 import { PLAY_VOXEL, PAUSE_VOXEL, PALETTES } from './VoxelAssets';
 
-const VoxelControls = ({ isPlaying, setIsPlaying, position = [0, 0, 0] }) => {
+const VoxelControls = ({ isPlaying, setIsPlaying, setIsSpotifyMode, position = [0, 0, 0] }) => {
     const group = useRef();
     const [hovered, setHovered] = useState(false);
 
@@ -21,7 +21,11 @@ const VoxelControls = ({ isPlaying, setIsPlaying, position = [0, 0, 0] }) => {
             <Float speed={2} rotationIntensity={0.2} floatIntensity={0.5}>
                 <group
                     ref={group}
-                    onClick={(e) => { e.stopPropagation(); setIsPlaying(!isPlaying); }}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setIsPlaying(!isPlaying);
+                        if (setIsSpotifyMode) setIsSpotifyMode(true);
+                    }}
                     onPointerOver={() => { document.body.style.cursor = 'pointer'; setHovered(true); }}
                     onPointerOut={() => { document.body.style.cursor = 'auto'; setHovered(false); }}
                 >

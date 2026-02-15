@@ -81,6 +81,7 @@ const MusicPlayer3D = () => {
                         <VoxelControls
                             isPlaying={isPlaying}
                             setIsPlaying={setIsPlaying}
+                            setIsSpotifyMode={setIsSpotifyMode}
                             position={[8, 0, 0]}
                         />
 
