@@ -74,7 +74,7 @@ const MusicPlayer3D = () => {
                             color="#E91E63"
                             anchorX="center"
                             anchorY="middle"
-                            font="https://fonts.gstatic.com/s/pressstart2p/v14/e3t4euO8mT-gSK7De23ABF1W9w.woff" // Pixel font for header
+                            // font prop removed to prevent crash
                             fillOpacity={0.8}
                         >
                             FOR JOSEPHINE
