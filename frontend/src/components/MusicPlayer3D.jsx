@@ -29,7 +29,7 @@ const MusicPlayer3D = () => {
     const [currentSongIndex, setCurrentSongIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
     const [activeNote, setActiveNote] = useState(null);
-    const [isSpotifyMode, setIsSpotifyMode] = useState(false);
+    const [isSpotifyMode, setIsSpotifyMode] = useState(true);
 
     useEffect(() => {
         const handleResize = () => {
