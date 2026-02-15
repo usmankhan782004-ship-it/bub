@@ -5,9 +5,12 @@ import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import HeartVinyl from './3d/HeartVinyl';
 import FloatingItems from './3d/FloatingItems';
 import VoxelConsole from './3d/VoxelConsole';
+import Playlist from './Playlist';
 
 const MusicPlayer3D = () => {
     const [zoom, setZoom] = useState(25);
+    const [currentSongIndex, setCurrentSongIndex] = useState(0);
+    const [isPlaying, setIsPlaying] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
@@ -25,7 +28,7 @@ const MusicPlayer3D = () => {
     }, []);
 
     return (
-        <div style={{ width: '100vw', height: '100vh', background: '#E0F7FA' }}>
+        <div style={{ width: '100vw', height: '100vh', background: '#E0F7FA', position: 'relative' }}>
             <Canvas dpr={[1, 1.25]} performance={{ min: 0.1 }}> {/* Extremely conservative DPR for smoothness */}
                 {/* Isometric Camera View */}
                 <OrthographicCamera
@@ -47,7 +50,7 @@ const MusicPlayer3D = () => {
 
                 <Suspense fallback={null}>
                     <group position={[0, -1, 0]}> {/* Shifted down slightly to center on phone */}
-                        <HeartVinyl position={[0, 1, 0]} />
+                        <HeartVinyl position={[0, 1, 0]} isPlaying={isPlaying} />
                         <VoxelConsole />
                         <FloatingItems />
                     </group>
@@ -59,8 +62,8 @@ const MusicPlayer3D = () => {
                 <OrbitControls
                     enableZoom={false} // Disable zoom to prevent mess on mobile
                     enablePan={false}
-                    autoRotate
-                    autoRotateSpeed={0.5} // slightly faster than 0.3 to feel "alive" but smooth
+                    autoRotate={isPlaying} // Only rotate when playing? Or always? Let's say always for vibe, or maybe only when playing. User liked smoothness. Let's keep it always rotating slowly.
+                    autoRotateSpeed={0.5}
                     minPolarAngle={Math.PI / 4}
                     maxPolarAngle={Math.PI / 2}
                 />
@@ -72,27 +75,13 @@ const MusicPlayer3D = () => {
                 </EffectComposer>
             </Canvas>
 
-            {/* UI Overlay */}
-            <div style={{
-                position: 'absolute',
-                bottom: '8%',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                textAlign: 'center',
-                padding: '20px',
-                background: 'rgba(255, 255, 255, 0.2)',
-                backdropFilter: 'blur(10px)',
-                borderRadius: '20px',
-                border: '1px solid rgba(255, 255, 255, 0.4)',
-                color: '#d147a3',
-                fontFamily: "'Courier New', Courier, monospace",
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.1)',
-                pointerEvents: 'none'
-            }}>
-                <h1 style={{ margin: 0, fontSize: '1.5rem', letterSpacing: '2px', textTransform: 'uppercase' }}>Voxel Love</h1>
-                <div style={{ width: '100%', height: '2px', background: '#d147a3', margin: '10px 0', opacity: 0.5 }}></div>
-                <p style={{ margin: 0, fontSize: '0.8rem', fontWeight: 'bold' }}>Playing: 8-Bit Heartbeat.wav</p>
-            </div>
+            {/* Playlist Overlay */}
+            <Playlist
+                currentSongIndex={currentSongIndex}
+                setCurrentSongIndex={setCurrentSongIndex}
+                isPlaying={isPlaying}
+                setIsPlaying={setIsPlaying}
+            />
         </div>
     );
 };

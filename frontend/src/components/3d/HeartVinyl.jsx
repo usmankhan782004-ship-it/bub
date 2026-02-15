@@ -5,17 +5,27 @@ import VoxelBuilder from './VoxelBuilder';
 import { HEART_VOXEL, PALETTES } from './VoxelAssets';
 import * as THREE from 'three';
 
-const HeartVinyl = (props) => {
+const HeartVinyl = ({ isPlaying, ...props }) => {
     const group = useRef();
 
     useFrame((state, delta) => {
         if (group.current) {
-            group.current.rotation.y -= delta * 0.2; // Spin slower
+            // Spin logic - faster if playing?
+            group.current.rotation.y -= delta * (isPlaying ? 0.8 : 0.2);
+
+            // Heartbeat logic
+            if (isPlaying) {
+                const beat = Math.sin(state.clock.elapsedTime * 8) * 0.05 + 1; // Fast heartbeat
+                group.current.scale.set(beat, beat, beat);
+            } else {
+                // Reset scale smoothly? Just snap for now or lerp
+                group.current.scale.lerp(new THREE.Vector3(1, 1, 1), 0.1);
+            }
         }
     });
 
     return (
-        <Float speed={1} rotationIntensity={0.1} floatIntensity={0.3}>
+        <Float speed={isPlaying ? 2 : 1} rotationIntensity={0.1} floatIntensity={0.3}>
             <group ref={group} {...props}>
                 <VoxelBuilder
                     matrix={HEART_VOXEL}
