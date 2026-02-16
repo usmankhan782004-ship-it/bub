@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Play, Pause, SkipForward, SkipBack, Heart, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Robust Audio Sources with Fallbacks
+// Robust Audio Sources
 const TRACKS = [
     {
         title: "Touching Moments",
@@ -13,8 +13,7 @@ const TRACKS = [
     {
         title: "Better Days",
         artist: "LAKEY INSPIRED",
-        src: "https://soundcloud.com/lakeyinspired/better-days/download", // Placeholder for a known good link
-        // Fallback to a reliable test stream if needed
+        src: "https://soundcloud.com/lakeyinspired/better-days/download",
         backupSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
         color: "bg-blue-100"
     },
@@ -49,15 +48,13 @@ const Playlist = ({ currentSongIndex, setCurrentSongIndex, isPlaying, setIsPlayi
     };
 
     const handleError = () => {
-        console.error("Audio Error, trying next track or backup...");
+        console.error("Audio Error:", error);
         setError(true);
-        // Try fallback if available, otherwise skip
         if (currentTrack.backupSrc && audioRef.current.src !== currentTrack.backupSrc) {
             audioRef.current.src = currentTrack.backupSrc;
             audioRef.current.play();
             setError(false);
         } else {
-            // Auto-skip on error after 2 seconds
             setTimeout(nextTrack, 2000);
         }
     };
@@ -66,13 +63,7 @@ const Playlist = ({ currentSongIndex, setCurrentSongIndex, isPlaying, setIsPlayi
         if (audioRef.current) {
             audioRef.current.volume = volume;
             if (isPlaying && !error) {
-                const playPromise = audioRef.current.play();
-                if (playPromise !== undefined) {
-                    playPromise.catch(e => {
-                        console.error("Playback failed (autoplay policy?):", e);
-                        setIsPlaying(false); // UI should reflect paused state
-                    });
-                }
+                audioRef.current.play().catch(e => setIsPlaying(false));
             } else {
                 audioRef.current.pause();
             }
@@ -80,14 +71,21 @@ const Playlist = ({ currentSongIndex, setCurrentSongIndex, isPlaying, setIsPlayi
     }, [isPlaying, currentSongIndex]);
 
     return (
+        // CHANGED: Fixed positioning to ensure it floats above everything on mobile
+        // Increased z-index to 100
+        // Added bottom padding for safe areas
         <motion.div
-            className="absolute bottom-4 left-4 right-4 md:right-auto md:w-80 rounded-[30px] overflow-hidden shadow-2xl z-50 pointer-events-auto"
+            className="fixed bottom-6 left-4 right-4 md:right-8 md:bottom-8 md:w-80 rounded-[30px] overflow-hidden shadow-2xl pointer-events-auto"
             style={{
-                background: 'rgba(255, 255, 255, 0.9)',
+                zIndex: 1000,
+                background: 'rgba(255, 255, 255, 0.95)', // Increased opacity for visibility
                 backdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255, 255, 255, 0.4)',
-                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.15)',
+                border: '1px solid rgba(255, 255, 255, 0.5)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
             }}
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 1, type: 'spring' }}
         >
             <audio
                 ref={audioRef}
@@ -97,39 +95,38 @@ const Playlist = ({ currentSongIndex, setCurrentSongIndex, isPlaying, setIsPlayi
             />
 
             {/* Compact Player UI */}
-            <div className="p-4 flex items-center justify-between" onClick={() => setIsExpanded(!isExpanded)}>
-                <div className="flex items-center gap-4">
-                    {/* Visualizer Icon */}
-                    <div className={`w-12 h-12 rounded-full overflow-hidden shadow-md flex-shrink-0 relative ${currentTrack.color} flex items-center justify-center ${isPlaying ? 'animate-spin-slow' : ''}`}>
-                        <span className="text-xl">🎵</span>
+            <div className="p-3 md:p-4 flex items-center justify-between" onClick={() => setIsExpanded(!isExpanded)}>
+                <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden shadow-md flex-shrink-0 relative ${currentTrack.color} flex items-center justify-center ${isPlaying ? 'animate-spin-slow' : ''}`}>
+                        <span className="text-lg md:text-xl">🎵</span>
                     </div>
 
                     <div className="overflow-hidden">
-                        <h3 className="text-slate-800 font-bold text-sm truncate w-32">{error ? "Loading..." : currentTrack.title}</h3>
-                        <p className="text-pink-500 text-xs font-medium truncate">{error ? "Retrying..." : currentTrack.artist}</p>
+                        <h3 className="text-slate-800 font-bold text-xs md:text-sm truncate w-24 md:w-32">{error ? "Loading..." : currentTrack.title}</h3>
+                        <p className="text-pink-500 text-[10px] md:text-xs font-medium truncate">{error ? "Retrying..." : currentTrack.artist}</p>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 md:gap-2">
                     <button
                         className="p-2 text-slate-400 hover:text-pink-500 transition-colors"
                         onClick={(e) => { e.stopPropagation(); prevTrack(); }}
                     >
-                        <SkipBack size={20} />
+                        <SkipBack size={18} />
                     </button>
 
                     <button
-                        className="w-10 h-10 rounded-full bg-pink-500 hover:bg-pink-600 flex items-center justify-center transition-colors shadow-lg active:scale-95"
+                        className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-pink-500 hover:bg-pink-600 flex items-center justify-center transition-colors shadow-lg active:scale-95"
                         onClick={(e) => { e.stopPropagation(); setIsPlaying(!isPlaying); }}
                     >
-                        {isPlaying ? <Pause size={18} className="text-white" /> : <Play size={18} className="text-white ml-1" />}
+                        {isPlaying ? <Pause size={16} className="text-white" /> : <Play size={16} className="text-white ml-1" />}
                     </button>
 
                     <button
                         className="p-2 text-slate-400 hover:text-pink-500 transition-colors"
                         onClick={(e) => { e.stopPropagation(); nextTrack(); }}
                     >
-                        <SkipForward size={20} />
+                        <SkipForward size={18} />
                     </button>
                 </div>
             </div>
@@ -170,16 +167,6 @@ const Playlist = ({ currentSongIndex, setCurrentSongIndex, isPlaying, setIsPlayi
                 @keyframes spin {
                     from { transform: rotate(0deg); }
                     to { transform: rotate(360deg); }
-                }
-                .custom-scrollbar::-webkit-scrollbar {
-                    width: 4px;
-                }
-                .custom-scrollbar::-webkit-scrollbar-track {
-                    background: transparent;
-                }
-                .custom-scrollbar::-webkit-scrollbar-thumb {
-                    background: #ddd;
-                    border-radius: 4px;
                 }
             `}</style>
         </motion.div>

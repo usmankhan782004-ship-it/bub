@@ -2,66 +2,85 @@ import React, { useRef } from 'react';
 
 const Gallery = ({ items = [] }) => {
     return (
-        // Wrapper: Centered, no size imposition
-        <div className="flex flex-col items-center justify-center">
-            <h3 className="text-[#1E3A8A] text-xl font-bold mb-4 drop-shadow-sm">
+        <div className="w-full h-full flex flex-col items-center justify-center">
+            <h3 className="text-[#1E3A8A] text-xl font-bold mb-6 drop-shadow-sm">
                 Our Memories
             </h3>
 
             {/* 
-               ULTRA-COMPACT PHONE FRAME
-               - Fixed 280px width (Safe for small screens)
-               - Fixed 450px height
-               - Snap Carousel
+               GALLERY V6: Horizontal Scrolling Strip (Netflix Style)
+               - No restrictive phone frame
+               - Full width (max-w-4xl)
+               - Standard overflow-x-auto for native touch scrolling
+               - 'Row wise' arrangement
             */}
             <div
-                className="relative bg-black rounded-[30px] border-[10px] border-gray-800 shadow-xl overflow-hidden"
+                className="w-full max-w-5xl overflow-x-auto px-8 pb-8 custom-scrollbar relative z-50 pointer-events-auto"
                 style={{
-                    width: '280px',
-                    height: '450px',
-                    margin: '0 auto', // Center explicitly
-                    flexShrink: 0
+                    WebkitOverflowScrolling: 'touch', // Essential for smooth iOS scroll
+                    scrollbarWidth: 'auto', // Allow scrollbar to be seen if needed
+                    display: 'flex',
+                    gap: '20px',
+                    scrollSnapType: 'x mandatory', // Optional snap, but usually feels good
                 }}
             >
-                {/* Scroll Container */}
-                <div
-                    className="w-full h-full overflow-x-auto flex snap-x snap-mandatory scroll-smooth"
-                    style={{
-                        scrollbarWidth: 'none',
-                        msOverflowStyle: 'none',
-                    }}
-                >
-                    {items.map((item, index) => (
-                        <div
-                            key={index}
-                            className="w-full h-full flex-shrink-0 snap-center flex flex-col items-center justify-center bg-black relative"
-                            style={{ width: '100%' }} // Force width
-                        >
-                            <img
-                                src={item.src}
-                                alt={item.alt}
-                                style={{
-                                    maxWidth: '100%',
-                                    maxHeight: '100%',
-                                    objectFit: 'contain'
-                                }}
-                                loading="lazy"
-                            />
+                {items.map((item, index) => (
+                    <div
+                        key={index}
+                        className="flex-shrink-0 relative group snap-center"
+                        style={{
+                            width: '260px',
+                            height: '380px'
+                        }}
+                    >
+                        <div className="w-full h-full bg-white p-3 shadow-lg rounded-2xl transform transition-transform duration-300 hover:-translate-y-2 border border-gray-100 flex flex-col">
+                            <div className="flex-1 w-full overflow-hidden rounded-xl bg-gray-50">
+                                <img
+                                    src={item.src}
+                                    alt={item.alt}
+                                    className="w-full h-full object-cover"
+                                    loading="lazy"
+                                    draggable={false}
+                                />
+                            </div>
 
-                            {/* Counter */}
-                            <div className="absolute bottom-4 left-0 w-full text-center">
-                                <span className="bg-white/20 text-white text-[10px] px-2 py-1 rounded-full backdrop-blur-sm">
-                                    {index + 1} / {items.length}
+                            <div className="mt-3 text-center">
+                                <span className="text-gray-500 font-medium text-xs font-handwriting">
+                                    {item.alt || `Memory ${index + 1}`}
                                 </span>
                             </div>
                         </div>
-                    ))}
-                </div>
+                    </div>
+                ))}
+
+                {/* End spacer */}
+                <div className="w-8 flex-shrink-0" />
             </div>
 
-            <p className="text-[#1E3A8A]/50 text-xs mt-4 animate-pulse">
-                ← Slide →
+            <p className="text-[#1E3A8A]/50 text-xs mt-2 animate-pulse">
+                Scroll horizontally using mouse or touch →
             </p>
+
+            <style>{`
+                .custom-scrollbar::-webkit-scrollbar {
+                    height: 8px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-track {
+                    background: rgba(0,0,0,0.05);
+                    border-radius: 10px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background: rgba(30, 58, 138, 0.2);
+                    border-radius: 10px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                    background: rgba(30, 58, 138, 0.4);
+                }
+                /* Ensure font-handwriting exists or fallback */
+                .font-handwriting {
+                    font-family: 'Courier New', Courier, monospace; 
+                }
+            `}</style>
         </div>
     );
 };
