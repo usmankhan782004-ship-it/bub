@@ -1,117 +1,114 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, Sparkles } from 'lucide-react';
 
-const overlayVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: { duration: 0.3 }
-    },
-    exit: {
-        opacity: 0,
-        transition: { duration: 0.2 }
-    }
-};
-
-const contentVariants = {
-    hidden: { y: '100%', opacity: 0, scale: 0.95 },
-    visible: {
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        transition: { type: 'spring', damping: 25, stiffness: 300 }
-    },
-    exit: {
-        y: '20%',
-        opacity: 0,
-        scale: 0.95,
-        transition: { duration: 0.2 }
-    }
-};
+/*
+  MemoryOverlay — DOM Hierarchy:
+  
+  1. FIXED FULL-SCREEN OVERLAY (position: fixed, inset: 0)
+     └─ Backdrop (absolute, click-to-close)
+     └─ 2. NON-SCROLLING SHELL (the modal frame, flex col)
+           └─ Header (shrink-0, sticky top)
+           └─ 3. SINGLE SCROLLABLE CONTAINER (flex-1, overflow-y: auto)
+                 └─ 4. Content (children — Gallery grid goes here)
+*/
 
 const MemoryOverlay = ({ isOpen, onClose, title, children }) => {
-    // Scroll Lock
+    const handleClose = useCallback(() => onClose(), [onClose]);
+
+    // Scroll Lock on body
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
         } else {
-            document.body.style.overflow = 'unset';
+            document.body.style.overflow = '';
         }
-        return () => { document.body.style.overflow = 'unset'; };
+        return () => { document.body.style.overflow = ''; };
     }, [isOpen]);
 
-    // Close on Escape
+    // ESC key
     useEffect(() => {
+        if (!isOpen) return;
         const handleEsc = (e) => {
-            if (e.key === 'Escape') onClose();
+            if (e.key === 'Escape') handleClose();
         };
         window.addEventListener('keydown', handleEsc);
         return () => window.removeEventListener('keydown', handleEsc);
-    }, [onClose]);
+    }, [isOpen, handleClose]);
 
     return (
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-[40] flex items-center justify-center pointer-events-auto">
-                    {/* Backdrop */}
-                    <motion.div
+                /* Layer 1: FIXED FULL-SCREEN OVERLAY */
+                <motion.div
+                    className="fixed inset-0"
+                    style={{ zIndex: 40 }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.25 }}
+                >
+                    {/* Backdrop — click to close */}
+                    <div
                         className="absolute inset-0 bg-black/60 backdrop-blur-md"
-                        variants={overlayVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="exit"
-                        onClick={onClose}
+                        onClick={handleClose}
                     />
 
-                    {/* Modal Content Sheet */}
+                    {/* Layer 2: NON-SCROLLING SHELL (the modal card) */}
                     <motion.div
-                        className="relative w-full h-full md:w-[90%] md:h-[90%] bg-white/10 md:rounded-3xl shadow-2xl overflow-hidden flex flex-col border border-white/20"
-                        style={{ backdropFilter: 'blur(30px)' }}
-                        variants={contentVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="exit"
+                        className="absolute inset-0 md:inset-4 lg:inset-8 flex flex-col md:rounded-3xl overflow-hidden border border-white/20 shadow-2xl"
+                        style={{
+                            background: 'rgba(255, 255, 255, 0.08)',
+                            backdropFilter: 'blur(40px)',
+                            WebkitBackdropFilter: 'blur(40px)',
+                        }}
+                        initial={{ y: 40, opacity: 0, scale: 0.97 }}
+                        animate={{ y: 0, opacity: 1, scale: 1 }}
+                        exit={{ y: 40, opacity: 0, scale: 0.97 }}
+                        transition={{ type: 'spring', damping: 28, stiffness: 300 }}
                     >
-                        {/* Header Wrapper */}
-                        <div className="flex items-center justify-between p-4 md:p-6 shrink-0 z-50 bg-gradient-to-b from-black/20 to-transparent">
-                            {/* Back Button */}
+                        {/* Header — shrink-0, never scrolls */}
+                        <div className="flex items-center justify-between px-4 py-3 md:px-6 md:py-4 shrink-0 border-b border-white/10 bg-black/20">
                             <button
-                                onClick={onClose}
-                                className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full backdrop-blur-md transition-all group"
+                                onClick={handleClose}
+                                className="flex items-center gap-2 px-4 py-2 bg-white/15 hover:bg-white/25 text-white rounded-full transition-all group active:scale-95"
                             >
-                                <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-                                <span className="font-medium text-sm">Back to Memories</span>
+                                <ChevronLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+                                <span className="font-medium text-sm hidden sm:inline">Back to Memories</span>
+                                <span className="font-medium text-sm sm:hidden">Back</span>
                             </button>
 
-                            {/* Title / Brand */}
                             {title && (
-                                <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-2 text-white/50 pointer-events-none">
-                                    <Sparkles size={14} />
-                                    <span className="text-xs font-bold tracking-[0.2em] uppercase">{title}</span>
+                                <div className="flex items-center gap-2 text-white/40">
+                                    <Sparkles size={12} />
+                                    <span className="text-[11px] font-bold tracking-[0.2em] uppercase">{title}</span>
                                 </div>
                             )}
 
-                            {/* Close Icon (Optional Redundancy) */}
                             <button
-                                onClick={onClose}
-                                className="p-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all"
+                                onClick={handleClose}
+                                className="p-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-all active:scale-95"
+                                aria-label="Close"
                             >
-                                <X size={20} />
+                                <X size={18} />
                             </button>
                         </div>
 
-                        {/* Scrollable Content Area */}
-                        <div className="flex-1 overflow-y-auto overflow-x-hidden relative w-full custom-scrollbar">
-                            <div className="min-h-full w-full relative">
+                        {/* Layer 3: SINGLE SCROLLABLE CONTAINER */}
+                        <div
+                            className="flex-1 overflow-y-auto overflow-x-hidden"
+                            style={{
+                                WebkitOverflowScrolling: 'touch',
+                                overscrollBehavior: 'contain',
+                            }}
+                        >
+                            {/* Layer 4: Content wrapper with padding */}
+                            <div className="p-4 md:p-6 pb-28">
                                 {children}
                             </div>
                         </div>
-
-                        {/* Bottom safe area for Dock overlap prevention */}
-                        <div className="h-24 shrink-0" />
                     </motion.div>
-                </div>
+                </motion.div>
             )}
         </AnimatePresence>
     );

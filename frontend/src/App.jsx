@@ -171,8 +171,7 @@ function App() {
             )}
 
             {activeModule === 'gallery' && (
-              <div className="w-full h-full">
-                {/* Gallery manages its own internal layout, just ensure it fits */}
+              <div className="w-full max-w-5xl mx-auto">
                 <Gallery items={assets.gallery} />
               </div>
             )}
