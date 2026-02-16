@@ -182,7 +182,8 @@ function App() {
                   animate="animate"
                   exit="exit"
                 >
-                  <div className="w-full max-w-xl h-full flex items-center justify-center relative">
+                  {/* DYNAMIC WIDTH CONTAINER: Expand to max-w-6xl for Gallery, keep max-w-xl for others */}
+                  <div className={`w-full h-full flex items-center justify-center relative ${activeModule === 'gallery' ? 'max-w-6xl' : 'max-w-xl'}`}>
 
                     {activeModule === 'about' && (
                       <div
