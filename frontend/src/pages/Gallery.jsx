@@ -3,58 +3,71 @@ import React, { useRef } from 'react';
 const Gallery = ({ items = [] }) => {
     return (
         <div className="w-full h-full flex flex-col items-center justify-center p-4">
-            <h3 className="text-[#1E3A8A] text-xl font-bold mb-2 drop-shadow-sm">
+            <h3 className="text-[#1E3A8A] text-xl font-bold mb-4 drop-shadow-sm">
                 Our Memories
             </h3>
 
-            {/* Polaroid Frame Container */}
-            {/* Strictly Sized Box simulating a phone screen or frame */}
+            {/* 
+               FINAL ATTEMPT: "Small Card Frame" 
+               A fixed container that looks like a photo album.
+            */}
             <div
-                className="relative bg-white p-4 shadow-2xl rounded-xl border border-gray-100"
+                className="bg-white p-4 shadow-2xl rounded-xl border border-gray-200 flex flex-col items-center relative"
                 style={{
                     width: '320px',
-                    height: '480px',
+                    height: '500px',
                     maxWidth: '90vw',
-                    maxHeight: '60vh'
+                    maxHeight: '70vh'
                 }}
             >
-                {/* Inner Scroll Area */}
+                {/* Scroll Area */}
                 <div
-                    className="w-full h-full overflow-x-auto flex items-center gap-4 snap-x snap-mandatory"
-                    style={{
-                        scrollbarWidth: 'none',
-                        msOverflowStyle: 'none',
-                    }}
+                    className="w-full h-full overflow-y-auto flex flex-col gap-4 p-2 custom-scrollbar"
                 >
                     {items.map((item, index) => (
                         <div
                             key={index}
-                            className="flex-shrink-0 w-full h-full snap-center flex items-center justify-center p-2"
+                            className="w-full flex-shrink-0 bg-gray-50 p-2 rounded-lg shadow-sm border border-gray-100"
                         >
-                            <div className="w-full h-full flex flex-col items-center bg-gray-50 rounded-lg shadow-inner p-2 border border-gray-100">
-                                <div className="flex-1 w-full overflow-hidden rounded-md bg-white flex items-center justify-center">
-                                    <img
-                                        src={item.src}
-                                        alt={item.alt}
-                                        className="max-w-full max-h-full object-contain pointer-events-none"
-                                        loading="lazy"
-                                    />
-                                </div>
-                                <p className="mt-2 text-center text-xs font-handwriting text-gray-600">
-                                    {item.alt || `Memory ${index + 1}`}
-                                </p>
+                            <div className="w-full aspect-[4/3] overflow-hidden rounded-md bg-white mb-2">
+                                <img
+                                    src={item.src}
+                                    alt={item.alt}
+                                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                                    loading="lazy"
+                                />
                             </div>
+                            <p className="text-center text-xs font-handwriting text-gray-500">
+                                {item.alt || `Memory ${index + 1}`}
+                            </p>
                         </div>
                     ))}
+
+                    <div className="text-center text-xs text-gray-300 mt-4 pb-2">
+                        End of Memory Lane ❤️
+                    </div>
                 </div>
 
-                {/* Decorative Elements */}
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-pink-200 w-16 h-4 opacity-50 rounded-sm rotate-1"></div>
+                {/* Decorative Pin */}
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full bg-red-400 shadow-sm border-2 border-white"></div>
             </div>
 
             <p className="text-[#1E3A8A]/50 text-xs mt-4 animate-pulse">
-                ← Swipe to browse →
+                Scroll down to see more ↓
             </p>
+
+            <style>{`
+                .custom-scrollbar::-webkit-scrollbar {
+                    width: 6px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background: #CBD5E1;
+                    border-radius: 10px;
+                }
+            `}</style>
         </div>
     );
 };
