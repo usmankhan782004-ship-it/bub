@@ -102,8 +102,8 @@ const MemoryOverlay = ({ isOpen, onClose, title, children }) => {
                                 overscrollBehavior: 'contain',
                             }}
                         >
-                            {/* Layer 4: Content wrapper with padding */}
-                            <div className="p-4 md:p-6 pb-28">
+                            {/* Layer 4: Content — min-h-full so children can use height:100% */}
+                            <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
                                 {children}
                             </div>
                         </div>

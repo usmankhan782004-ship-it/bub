@@ -1,13 +1,12 @@
 import React, { useRef } from 'react';
-import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 /*
-  Gallery — Strict Horizontal Scroll Strip
-  - Images sit in a single row inside a fixed-height frame
-  - Scroll left/right via touch swipe OR arrow buttons
-  - Each card is a fixed 260x360px — never grows or shrinks
-  - No vertical overflow, no grid, no masonry
+  Gallery — Viewport-Locked Horizontal Strip
+  
+  CRITICAL: Uses ONLY inline styles with viewport units (vh/vw).
+  No Tailwind height classes, no h-full, no flex-1.
+  This guarantees the gallery fits on screen regardless of parent chain.
 */
 
 const Gallery = ({ items = [] }) => {
@@ -15,84 +14,162 @@ const Gallery = ({ items = [] }) => {
 
     const scroll = (dir) => {
         if (!scrollRef.current) return;
-        const amount = 280;
         scrollRef.current.scrollBy({
-            left: dir === 'left' ? -amount : amount,
+            left: dir === 'left' ? -300 : 300,
             behavior: 'smooth'
         });
     };
 
     return (
-        <div className="w-full flex flex-col items-center justify-center h-full">
+        <div style={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '16px',
+            boxSizing: 'border-box',
+        }}>
             {/* Title */}
-            <h3 className="text-white text-xl font-bold mb-4 tracking-wide">
+            <h3 style={{
+                color: 'white',
+                fontSize: '20px',
+                fontWeight: 'bold',
+                marginBottom: '16px',
+                textAlign: 'center',
+            }}>
                 Our Memories
             </h3>
 
-            {/* Frame: fixed height container, horizontally scrollable */}
-            <div className="relative w-full max-w-[90vw] group">
+            {/* Frame + Arrows wrapper */}
+            <div style={{
+                position: 'relative',
+                width: '100%',
+                maxWidth: '95vw',
+                display: 'flex',
+                alignItems: 'center',
+            }}>
                 {/* Left Arrow */}
                 <button
                     onClick={() => scroll('left')}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 z-20 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full shadow-lg transition-all opacity-0 group-hover:opacity-100 hidden md:flex items-center justify-center"
+                    style={{
+                        position: 'absolute',
+                        left: '-4px',
+                        zIndex: 20,
+                        background: 'rgba(0,0,0,0.5)',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '50%',
+                        width: '36px',
+                        height: '36px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                    }}
                 >
-                    <ChevronLeft size={20} />
+                    <ChevronLeft size={18} />
                 </button>
 
                 {/* Right Arrow */}
                 <button
                     onClick={() => scroll('right')}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 z-20 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full shadow-lg transition-all opacity-0 group-hover:opacity-100 hidden md:flex items-center justify-center"
+                    style={{
+                        position: 'absolute',
+                        right: '-4px',
+                        zIndex: 20,
+                        background: 'rgba(0,0,0,0.5)',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '50%',
+                        width: '36px',
+                        height: '36px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                    }}
                 >
-                    <ChevronRight size={20} />
+                    <ChevronRight size={18} />
                 </button>
 
-                {/* Horizontal Scroll Strip */}
+                {/* THE SCROLL STRIP — uses calc(100vh - 200px) for card height */}
                 <div
                     ref={scrollRef}
-                    className="flex gap-4 overflow-x-auto overflow-y-hidden py-2 px-2 snap-x snap-mandatory"
                     style={{
+                        display: 'flex',
+                        gap: '12px',
+                        overflowX: 'auto',
+                        overflowY: 'hidden',
+                        width: '100%',
+                        padding: '8px 40px',
+                        scrollSnapType: 'x mandatory',
                         WebkitOverflowScrolling: 'touch',
                         scrollbarWidth: 'none',
                         msOverflowStyle: 'none',
                     }}
                 >
                     {items.map((item, index) => (
-                        <motion.div
+                        <div
                             key={index}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: index * 0.1 }}
-                            className="flex-shrink-0 snap-center rounded-2xl overflow-hidden border border-white/20 shadow-lg bg-black/30 relative group/card"
-                            style={{ width: '260px', height: '360px' }}
+                            style={{
+                                flexShrink: 0,
+                                width: 'calc((100vh - 220px) * 0.65)', /* Width based on viewport height */
+                                height: 'calc(100vh - 220px)',         /* Height locked to viewport */
+                                maxHeight: '400px',
+                                maxWidth: '260px',
+                                borderRadius: '16px',
+                                overflow: 'hidden',
+                                border: '2px solid rgba(255,255,255,0.15)',
+                                scrollSnapAlign: 'center',
+                                position: 'relative',
+                                boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+                            }}
                         >
                             <img
                                 src={item.src}
                                 alt={item.alt || `Memory ${index + 1}`}
-                                className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'cover',
+                                    display: 'block',
+                                }}
                                 loading="lazy"
                                 draggable={false}
                             />
-                            {/* Label */}
-                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
-                                <p className="text-white text-xs font-medium tracking-wide">
+                            {/* Label gradient */}
+                            <div style={{
+                                position: 'absolute',
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                padding: '12px',
+                                background: 'linear-gradient(transparent, rgba(0,0,0,0.6))',
+                            }}>
+                                <p style={{
+                                    color: 'white',
+                                    fontSize: '11px',
+                                    fontWeight: '600',
+                                    margin: 0,
+                                }}>
                                     {item.alt || `Memory ${index + 1}`}
                                 </p>
                             </div>
-                        </motion.div>
+                        </div>
                     ))}
                 </div>
             </div>
 
-            {/* Swipe hint (mobile) */}
-            <p className="text-white/30 text-xs mt-3 md:hidden animate-pulse">
+            {/* Swipe hint */}
+            <p style={{
+                color: 'rgba(255,255,255,0.3)',
+                fontSize: '11px',
+                marginTop: '12px',
+            }}>
                 ← Swipe to explore →
             </p>
-
-            {/* Hide scrollbar */}
-            <style>{`
-                div::-webkit-scrollbar { display: none; }
-            `}</style>
         </div>
     );
 };

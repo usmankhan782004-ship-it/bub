@@ -171,7 +171,7 @@ function App() {
             )}
 
             {activeModule === 'gallery' && (
-              <div className="w-full max-w-5xl mx-auto">
+              <div style={{ flex: 1, width: '100%' }}>
                 <Gallery items={assets.gallery} />
               </div>
             )}
