@@ -34,23 +34,20 @@ const Playlist = ({ currentSongIndex, setCurrentSongIndex, isPlaying, setIsPlayi
         >
             {/* Spotify Embed Mode */}
             {isSpotifyMode ? (
-                <div className="w-full h-80 relative group">
-                    <button
-                        onClick={() => setIsSpotifyMode(false)}
-                        className="absolute top-2 right-2 z-10 bg-white/50 p-1 rounded-full hover:bg-white text-xs font-bold px-2 pointer-events-auto"
-                    >
-                        Back to Visuals
-                    </button>
-
-                    {/* Helper Overlay - Disappears when user interacts or after delay */}
-                    <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
-                        <div className="bg-black/50 text-white px-4 py-2 rounded-full animate-pulse backdrop-blur-sm">
-                            👆 Click "Play" on Spotify
-                        </div>
+                <div className="w-full h-96 flex flex-col gap-2 p-2">
+                    <div className="flex justify-between items-center px-1">
+                        <span className="text-xs font-bold text-[#1DB954]">Spotify Player</span>
+                        <button
+                            onClick={() => setIsSpotifyMode(false)}
+                            className="bg-white/80 hover:bg-white text-xs font-bold px-3 py-1 rounded-full text-slate-700"
+                        >
+                            Close
+                        </button>
                     </div>
 
-                    <div className="w-full h-full relative z-0">
+                    <div className="flex-1 bg-black rounded-xl overflow-hidden shadow-inner relative">
                         <iframe
+                            key={isSpotifyMode ? 'spotify-active' : 'spotify-hidden'} // Force reload
                             style={{ borderRadius: '12px' }}
                             src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M?utm_source=generator&theme=0"
                             width="100%"
@@ -58,9 +55,16 @@ const Playlist = ({ currentSongIndex, setCurrentSongIndex, isPlaying, setIsPlayi
                             frameBorder="0"
                             allowFullScreen=""
                             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                            loading="lazy"
+                            loading="eager"
                         ></iframe>
                     </div>
+
+                    <a
+                        href="spotify:playlist:37i9dQZF1DXcBWIGoYBM5M"
+                        className="text-center text-[10px] text-white/50 hover:text-white underline"
+                    >
+                        Issues? Open in Spotify App
+                    </a>
                 </div>
             ) : (
                 <>
