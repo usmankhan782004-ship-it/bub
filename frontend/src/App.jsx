@@ -91,11 +91,11 @@ function App() {
           <Gatekeeper key="gatekeeper" onEnter={() => setEntered(true)} />
         </AnimatePresence>
       ) : (
-        <div style={{ position: 'relative', zIndex: 10, width: '100%', minHeight: '100dvh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingBottom: '100px' }}>
+        <div style={{ position: 'relative', zIndex: 10, width: '100%', height: '100dvh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
           {/* Header */}
           <motion.div
-            className="w-full flex flex-col items-center justify-center shrink-0"
+            className="w-full flex flex-col items-center justify-center shrink-0 pt-10"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -153,13 +153,13 @@ function App() {
             )}
           </AnimatePresence>
 
-          {/* Main Content Area */}
-          <div className="w-full flex items-center justify-center relative" style={{ height: '60vh', maxHeight: '60vh' }}>
+          {/* Main Content Area - Scrollable Container */}
+          <div className="flex-1 w-full overflow-hidden relative">
             <AnimatePresence mode="wait">
               {!activeModule ? (
                 <motion.div
                   key="default-prompt"
-                  className="flex flex-col items-center justify-center text-[#1E3A8A] opacity-60"
+                  className="w-full h-full flex flex-col items-center justify-center text-[#1E3A8A] opacity-60"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
@@ -176,29 +176,30 @@ function App() {
               ) : (
                 <motion.div
                   key={activeModule}
-                  className="w-full h-full flex items-center justify-center"
+                  className="w-full h-full"
                   variants={contentVariants}
                   initial="initial"
                   animate="animate"
                   exit="exit"
                 >
-                  {/* DYNAMIC WIDTH CONTAINER: Expand to max-w-6xl for Gallery, keep max-w-xl for others */}
-                  <div className={`w-full h-full relative ${activeModule === 'gallery' ? 'max-w-6xl h-auto overflow-y-auto py-20 px-4' : 'flex items-center justify-center max-w-xl'}`}>
+                  {/* 
+                     SCROLLABLE WRAPPER
+                     - overflow-y-auto: Allows vertical scrolling
+                     - pb-48: HUGE bottom padding so content clears the Dock (which is fixed at bottom)
+                  */}
+                  <div className={`w-full h-full relative ${activeModule === 'gallery' ? 'max-w-7xl mx-auto overflow-y-auto pt-4 pb-48 px-4 scrollbar-hide' : 'flex items-center justify-center max-w-xl mx-auto'}`}>
 
                     {activeModule === 'about' && (
                       <div
-                        className="p-8 rounded-[40px] shadow-sm border border-white/50 w-full max-h-full overflow-y-auto"
+                        className="p-8 rounded-[40px] shadow-sm border border-white/50 w-full max-h-[70vh] overflow-y-auto"
                         style={{ background: 'rgba(255,255,255,0.4)', backdropFilter: 'blur(20px)' }}
                       >
-                        {/* Passing Callback + Prop if needed */}
                         <About onEasterEgg={() => setActiveModule('chubba')} />
                       </div>
                     )}
 
                     {activeModule === 'gallery' && (
-                      <div className="w-full h-full flex flex-col items-center justify-center">
-                        <Gallery items={assets.gallery} />
-                      </div>
+                      <Gallery items={assets.gallery} />
                     )}
 
                     {activeModule === 'letter' && (
@@ -245,12 +246,21 @@ function App() {
 
           <Dashboard setActiveModule={setActiveModule} activeModule={activeModule} />
 
-          {/* Footer */}
-          <div className="fixed bottom-2 left-0 right-0 text-center pointer-events-none z-[50]">
-            <p className="text-[10px] font-medium text-[#1E3A8A] opacity-40">
-              © 2026 Developed with 💙 by Max for his Bub
-            </p>
-          </div>
+          {/* Footer - Only visible when NO active module, or integrated into scrolling? 
+              Ref: User asked to "Move ... into a proper footer tag"
+              We will disable this fixed footer when modules are active to prevent conflict, 
+              or let the module handle its own footer. 
+              Let's keep it simply fixed at bottom but very low z-index so dock covers it if needed?
+              No, user said "never touches the dock".
+              Let's make it static.
+          */}
+          {!activeModule && (
+            <div className="absolute bottom-4 left-0 right-0 text-center pointer-events-none z-[10]">
+              <p className="text-[10px] font-medium text-[#1E3A8A] opacity-40">
+                © 2026 Developed with 💙 by Max for his Bub
+              </p>
+            </div>
+          )}
         </div>
       )}
     </div>

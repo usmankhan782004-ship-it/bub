@@ -46,13 +46,13 @@ const DashboardTile = ({ icon, label, onClick, isActive, color }) => {
             onClick={onClick}
             className="flex flex-col items-center justify-center border transition-colors duration-300"
             style={{
-                width: '70px',
-                height: '70px',
-                borderRadius: '20px',
+                width: '60px', /* Slightly smaller for cleaner look */
+                height: '60px',
+                borderRadius: '18px',
                 cursor: 'pointer',
-                background: isActive ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.3)',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid white',
+                background: isActive ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 255, 255, 0.25)',
+                backdropFilter: 'blur(15px)',
+                border: '1px solid rgba(255, 255, 255, 0.8)',
                 boxShadow: '0 4px 6px rgba(0,0,0,0.05)'
             }}
         >
@@ -69,50 +69,45 @@ const DashboardTile = ({ icon, label, onClick, isActive, color }) => {
 const Dashboard = ({ setActiveModule, activeModule }) => {
     return (
         <motion.nav
-            className="fixed left-0 right-0 flex justify-center items-center pointer-events-none pb-[20px]"
-            style={{ zIndex: 9999, bottom: '40px' }}
+            className="fixed bottom-10 left-1/2 transform -translate-x-1/2 flex justify-center items-center pointer-events-none"
+            style={{ zIndex: 50 }} // As requested
             variants={containerVariants}
             initial="hidden"
             animate="visible"
         >
             <div
-                className="flex gap-2 p-4 rounded-[30px] pointer-events-auto shadow-2xl justify-between min-w-[320px]"
-                style={{
-                    background: 'rgba(255, 255, 255, 0.3)',
-                    backdropFilter: 'blur(20px)',
-                    border: '1px solid rgba(255,255,255,0.6)',
-                }}
+                className="flex gap-3 p-3 rounded-[30px] pointer-events-auto shadow-2xl justify-center items-center bg-white/10 backdrop-blur-xl border border-white/40"
             >
                 <DashboardTile
-                    icon={<Sparkles size={28} />}
+                    icon={<Sparkles size={24} />}
                     label="Home"
                     color="#60A5FA"
                     isActive={activeModule === 'about'}
                     onClick={() => setActiveModule('about')}
                 />
                 <DashboardTile
-                    icon={<Camera size={28} />}
+                    icon={<Camera size={24} />}
                     label="Gallery"
                     color="#0EA5E9"
                     isActive={activeModule === 'gallery'}
                     onClick={() => setActiveModule('gallery')}
                 />
                 <DashboardTile
-                    icon={<Mail size={28} />}
+                    icon={<Mail size={24} />}
                     label="Letter"
                     color="#F472B6"
                     isActive={activeModule === 'letter'}
                     onClick={() => setActiveModule('letter')}
                 />
                 <DashboardTile
-                    icon={<Map size={28} />}
+                    icon={<Map size={24} />}
                     label="Bridge"
                     color="#A78BFA"
                     isActive={activeModule === 'connection'}
                     onClick={() => setActiveModule('connection')}
                 />
                 <DashboardTile
-                    icon={<Music size={28} />}
+                    icon={<Music size={24} />}
                     label="Music"
                     color="#FF69B4"
                     isActive={activeModule === 'music'}
