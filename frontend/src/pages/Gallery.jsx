@@ -14,11 +14,11 @@ const Gallery = ({ items = [] }) => {
                         key={index}
                         className="aspect-[3/4] bg-white p-2 rounded-lg shadow-md hover:shadow-xl transition-shadow"
                     >
-                        <div className="w-full h-full overflow-hidden rounded-md bg-gray-100">
+                        <div className="w-full h-full overflow-hidden rounded-md bg-gray-100 flex items-center justify-center">
                             <img
                                 src={item.src}
                                 alt={item.alt}
-                                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500 max-h-[60vh] md:max-h-64"
                                 loading="lazy"
                             />
                         </div>

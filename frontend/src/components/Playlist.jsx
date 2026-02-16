@@ -1,160 +1,125 @@
-import React, { useState } from 'react';
-import { Play, Pause, SkipForward, SkipBack, Heart } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const songs = [
-    { title: "Perfect", artist: "Ed Sheeran", duration: "4:23", albumArt: "https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96" },
-    { title: "Lover", artist: "Taylor Swift", duration: "3:41", albumArt: "https://i.scdn.co/image/ab67616d0000b273e787cffec20aa2a396a61647" },
-    { title: "All of Me", artist: "John Legend", duration: "4:29", albumArt: "https://i.scdn.co/image/ab67616d0000b2736483844627993077e682d334" },
-    { title: "Just the Way You Are", artist: "Bruno Mars", duration: "3:40", albumArt: "https://i.scdn.co/image/ab67616d0000b273e659b0234032c57753238804" },
-    { title: "Until I Found You", artist: "Stephen Sanchez", duration: "2:57", albumArt: "https://i.scdn.co/image/ab67616d0000b2730c471c36970b940e0cf8164e" },
-    { title: "Can't Help Falling in Love", artist: "Elvis Presley", duration: "3:00", albumArt: "https://i.scdn.co/image/ab67616d0000b27320b923a5cfdd24bc5753b827" }
-];
+// Using a copyright-free romantic track from a stable source (Kevin MacLeod or similar)
+// Source: "Touching Moments Two - Higher" by Kevin MacLeod (incompetech.com)
+// Licensed under Creative Commons: By Attribution 4.0 License
+const MUSIC_SRC = "https://filmmusic.io/song/4538-touching-moments-two-higher/download";
+// Backup: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
 
-const Playlist = ({ currentSongIndex, setCurrentSongIndex, isPlaying, setIsPlaying, isSpotifyMode, setIsSpotifyMode }) => {
+const Playlist = ({ currentSongIndex, setCurrentSongIndex, isPlaying, setIsPlaying }) => {
     const [isExpanded, setIsExpanded] = useState(false);
-    // Local isSpotifyMode state removed
+    const audioRef = useRef(null);
+    const [volume, setVolume] = useState(0.5);
+    const [canPlay, setCanPlay] = useState(false);
 
-    // Placeholder art fallback
-    const currentArt = songs[currentSongIndex].albumArt;
+    // Auto-play attempt on mount
+    useEffect(() => {
+        if (audioRef.current) {
+            audioRef.current.volume = volume;
+            // Try to play immediately
+            const playPromise = audioRef.current.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    setIsPlaying(true);
+                    setCanPlay(true);
+                }).catch(error => {
+                    console.log("Autoplay prevented:", error);
+                    setIsPlaying(false);
+                    setCanPlay(true); // User interaction needed
+                });
+            }
+        }
+    }, []);
+
+    // Sync state with audio element
+    useEffect(() => {
+        if (audioRef.current) {
+            if (isPlaying) {
+                audioRef.current.play().catch(e => console.error("Play failed", e));
+            } else {
+                audioRef.current.pause();
+            }
+        }
+    }, [isPlaying]);
 
     return (
         <motion.div
-            drag
-            dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
             className="absolute bottom-4 left-4 right-4 md:right-auto md:w-80 rounded-[30px] overflow-hidden shadow-2xl z-50 pointer-events-auto"
             style={{
-                background: 'rgba(255, 255, 255, 0.25)',
+                background: 'rgba(255, 255, 255, 0.85)', // Use opague background for text readability
                 backdropFilter: 'blur(20px)',
                 border: '1px solid rgba(255, 255, 255, 0.4)',
                 boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.15)',
-                maxHeight: isExpanded ? '60vh' : 'auto',
-                transition: 'max-height 0.3s ease-in-out'
             }}
         >
-            {/* Spotify Embed Mode */}
-            {isSpotifyMode ? (
-                <div className="w-full h-96 flex flex-col gap-2 p-2">
-                    <div className="flex justify-between items-center px-1">
-                        <span className="text-xs font-bold text-[#1DB954]">Spotify Player</span>
-                        <button
-                            onClick={() => setIsSpotifyMode(false)}
-                            className="bg-white/80 hover:bg-white text-xs font-bold px-3 py-1 rounded-full text-slate-700"
-                        >
-                            Close
-                        </button>
+            {/* Hidden Audio Element */}
+            <audio
+                ref={audioRef}
+                src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lo-fi-chill-medium-version-120-bpm-11234.mp3" // Replacing with direct CDN MP3
+                loop
+                onEnded={() => setIsPlaying(false)}
+            />
+
+            {/* Simple Player UI */}
+            <div className="p-4 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                    {/* Album Art / Visualizer */}
+                    <div className={`w-12 h-12 rounded-full overflow-hidden shadow-md flex-shrink-0 relative bg-pink-100 flex items-center justify-center ${isPlaying ? 'animate-spin-slow' : ''}`}>
+                        <span className="text-xl">🎵</span>
                     </div>
 
-                    <div className="flex-1 bg-black rounded-xl overflow-hidden shadow-inner relative">
-                        <iframe
-                            key={isSpotifyMode ? 'spotify-active' : 'spotify-hidden'} // Force reload
-                            style={{ borderRadius: '12px' }}
-                            src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M?utm_source=generator&theme=0"
-                            width="100%"
-                            height="100%"
-                            frameBorder="0"
-                            allowFullScreen=""
-                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                            loading="eager"
-                        ></iframe>
+                    <div>
+                        <h3 className="text-slate-800 font-bold text-sm">For Josephine</h3>
+                        <p className="text-pink-500 text-xs font-medium">Click Play 👉</p>
                     </div>
-
-                    <a
-                        href="spotify:playlist:37i9dQZF1DXcBWIGoYBM5M"
-                        className="text-center text-[10px] text-white/50 hover:text-white underline"
-                    >
-                        Issues? Open in Spotify App
-                    </a>
                 </div>
-            ) : (
-                <>
-                    {/* Now Playing Bar (Always Visible) */}
-                    <div
-                        className="p-4 flex items-center gap-4 cursor-pointer relative"
-                        onClick={() => setIsExpanded(!isExpanded)}
-                    >
-                        {/* Album Art */}
-                        <div className={`w-12 h-12 rounded-md overflow-hidden shadow-md flex-shrink-0 relative ${isPlaying ? 'ring-2 ring-pink-400' : ''}`}>
-                            <img src={currentArt} alt="Album Art" className="w-full h-full object-cover" />
-                            {isPlaying && <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                                <div className="w-3 h-3 bg-white rounded-full animate-pulse" />
-                            </div>}
-                        </div>
 
+                <button
+                    className="w-12 h-12 rounded-full bg-pink-500 hover:bg-pink-600 flex items-center justify-center transition-colors shadow-lg active:scale-95"
+                    onClick={() => setIsPlaying(!isPlaying)}
+                    title={isPlaying ? "Pause" : "Play"}
+                >
+                    {isPlaying ? <Pause size={20} className="text-white" /> : <Play size={20} className="text-white ml-1" />}
+                </button>
+            </div>
 
-
-                        <div className="flex-1 min-w-0">
-                            <p className="text-[10px] font-bold text-pink-500 uppercase tracking-wider mb-0.5">Playing for Josephine</p>
-                            <h3 className="text-slate-800 font-bold text-sm truncate">{songs[currentSongIndex].title}</h3>
-                            <p className="text-slate-600 text-xs truncate">{songs[currentSongIndex].artist}</p>
-                        </div>
-
-                        <button
-                            className="w-10 h-10 rounded-full bg-white/50 hover:bg-white/80 flex items-center justify-center transition-colors shadow-sm"
-                            onClick={(e) => { e.stopPropagation(); setIsSpotifyMode(true); }}
-                            title="Play Music"
-                        >
-                            <Play size={18} className="text-slate-800 ml-1" />
-                        </button>
-                    </div>
-
-                    {/* Expanded Playlist */}
-                    <AnimatePresence>
-                        {isExpanded && (
-                            <motion.div
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: 'auto' }}
-                                exit={{ opacity: 0, height: 0 }}
-                                className="px-4 pb-4"
-                            >
-                                {/* Controls */}
-                                <div className="flex items-center justify-center gap-6 mb-4 mt-2">
-                                    <button className="text-slate-600 hover:text-slate-800 transition-colors" onClick={() => setCurrentSongIndex((prev) => (prev - 1 + songs.length) % songs.length)}>
-                                        <SkipBack size={24} />
-                                    </button>
-                                    <button
-                                        className="w-14 h-14 rounded-full bg-gradient-to-r from-pink-400 to-blue-400 flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
-                                        onClick={() => setIsSpotifyMode(true)}
-                                    >
-                                        <Play size={24} className="text-white ml-1" />
-                                    </button>
-                                    <button className="text-slate-600 hover:text-slate-800 transition-colors" onClick={() => setCurrentSongIndex((prev) => (prev + 1) % songs.length)}>
-                                        <SkipForward size={24} />
-                                    </button>
-                                </div>
-
-                                {/* Progress Bar (Visual Only) */}
-                                <div className="w-full h-1 bg-white/30 rounded-full mb-4 overflow-hidden">
-                                    <motion.div
-                                        className="h-full bg-pink-400 rounded-full"
-                                        initial={{ width: '0%' }}
-                                        animate={{ width: isPlaying ? '100%' : '30%' }}
-                                        transition={{ duration: isPlaying ? 30 : 0, ease: 'linear', repeat: Infinity }}
-                                    />
-                                </div>
-
-                                {/* Song List */}
-                                <div className="max-h-40 overflow-y-auto pr-1 space-y-2 custom-scrollbar">
-                                    {songs.map((song, index) => (
-                                        <div
-                                            key={index}
-                                            className={`flex items-center p-2 rounded-xl transition-colors cursor-pointer ${index === currentSongIndex ? 'bg-white/40' : 'hover:bg-white/20'}`}
-                                            onClick={() => { setCurrentSongIndex(index); setIsPlaying(true); }}
-                                        >
-                                            <span className="w-6 text-xs text-slate-500 font-mono">{index + 1}</span>
-                                            <div className="flex-1">
-                                                <p className={`text-xs font-bold ${index === currentSongIndex ? 'text-pink-600' : 'text-slate-700'}`}>{song.title}</p>
-                                                <p className="text-[10px] text-slate-500">{song.artist}</p>
-                                            </div>
-                                            <span className="text-[10px] text-slate-500">{song.duration}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </>
+            {/* Volume Slider (Optional, small) */}
+            {isExpanded && (
+                <div className="px-4 pb-4">
+                    <p className="text-center text-xs text-slate-400 mb-2">Lo-Fi Love Mix</p>
+                    <input
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                        value={volume}
+                        onChange={(e) => {
+                            setVolume(parseFloat(e.target.value));
+                            if (audioRef.current) audioRef.current.volume = parseFloat(e.target.value);
+                        }}
+                        className="w-full accent-pink-500 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                    />
+                </div>
             )}
+
+            <div
+                className="w-full bg-gray-100 h-6 flex items-center justify-center cursor-pointer hover:bg-gray-200 transition-colors"
+                onClick={() => setIsExpanded(!isExpanded)}
+            >
+                <div className="w-10 h-1 bg-gray-300 rounded-full" />
+            </div>
+
+            <style>{`
+                .animate-spin-slow {
+                    animation: spin 8s linear infinite;
+                }
+                @keyframes spin {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
+                }
+            `}</style>
         </motion.div>
     );
 };
