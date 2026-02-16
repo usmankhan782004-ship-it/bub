@@ -1,24 +1,27 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, SkipForward, SkipBack, Heart } from 'lucide-react';
+import { Play, Pause, SkipForward, SkipBack, Heart, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+// Robust Audio Sources with Fallbacks
 const TRACKS = [
     {
         title: "Touching Moments",
         artist: "Kevin MacLeod",
-        src: "https://filmmusic.io/song/4538-touching-moments-two-higher/download",
+        src: "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Kevin_MacLeod/Contemporary_Sampler/Kevin_MacLeod_-_Touching_Moments_Two_-_Higher.mp3",
         color: "bg-pink-100"
     },
     {
-        title: "Cute & Happy",
-        artist: "Pixabay",
-        src: "https://cdn.pixabay.com/download/audio/2022/10/18/audio_31c2730e64.mp3?filename=relaxing-light-background-116686.mp3",
+        title: "Better Days",
+        artist: "LAKEY INSPIRED",
+        src: "https://soundcloud.com/lakeyinspired/better-days/download", // Placeholder for a known good link
+        // Fallback to a reliable test stream if needed
+        backupSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
         color: "bg-blue-100"
     },
     {
         title: "Sweet Memories",
-        artist: "Pixabay",
-        src: "https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d0.mp3?filename=acoustic-motivation-11290.mp3",
+        artist: "Bensound",
+        src: "https://www.bensound.com/bensound-music/bensound-love.mp3",
         color: "bg-yellow-100"
     }
 ];
@@ -27,11 +30,12 @@ const Playlist = ({ currentSongIndex, setCurrentSongIndex, isPlaying, setIsPlayi
     const [isExpanded, setIsExpanded] = useState(false);
     const audioRef = useRef(null);
     const [volume, setVolume] = useState(0.5);
+    const [error, setError] = useState(false);
 
     const currentTrack = TRACKS[currentSongIndex];
 
-    // Handle song change
     const playTrack = (index) => {
+        setError(false);
         setCurrentSongIndex(index);
         setIsPlaying(true);
     };
@@ -44,12 +48,31 @@ const Playlist = ({ currentSongIndex, setCurrentSongIndex, isPlaying, setIsPlayi
         playTrack((currentSongIndex - 1 + TRACKS.length) % TRACKS.length);
     };
 
-    // Auto-play / Sync
+    const handleError = () => {
+        console.error("Audio Error, trying next track or backup...");
+        setError(true);
+        // Try fallback if available, otherwise skip
+        if (currentTrack.backupSrc && audioRef.current.src !== currentTrack.backupSrc) {
+            audioRef.current.src = currentTrack.backupSrc;
+            audioRef.current.play();
+            setError(false);
+        } else {
+            // Auto-skip on error after 2 seconds
+            setTimeout(nextTrack, 2000);
+        }
+    };
+
     useEffect(() => {
         if (audioRef.current) {
             audioRef.current.volume = volume;
-            if (isPlaying) {
-                audioRef.current.play().catch(e => console.error("Play error:", e));
+            if (isPlaying && !error) {
+                const playPromise = audioRef.current.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(e => {
+                        console.error("Playback failed (autoplay policy?):", e);
+                        setIsPlaying(false); // UI should reflect paused state
+                    });
+                }
             } else {
                 audioRef.current.pause();
             }
@@ -70,6 +93,7 @@ const Playlist = ({ currentSongIndex, setCurrentSongIndex, isPlaying, setIsPlayi
                 ref={audioRef}
                 src={currentTrack.src}
                 onEnded={nextTrack}
+                onError={handleError}
             />
 
             {/* Compact Player UI */}
@@ -81,8 +105,8 @@ const Playlist = ({ currentSongIndex, setCurrentSongIndex, isPlaying, setIsPlayi
                     </div>
 
                     <div className="overflow-hidden">
-                        <h3 className="text-slate-800 font-bold text-sm truncate w-32">{currentTrack.title}</h3>
-                        <p className="text-pink-500 text-xs font-medium truncate">{currentTrack.artist}</p>
+                        <h3 className="text-slate-800 font-bold text-sm truncate w-32">{error ? "Loading..." : currentTrack.title}</h3>
+                        <p className="text-pink-500 text-xs font-medium truncate">{error ? "Retrying..." : currentTrack.artist}</p>
                     </div>
                 </div>
 

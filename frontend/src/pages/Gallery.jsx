@@ -1,56 +1,59 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 const Gallery = ({ items = [] }) => {
     return (
         <div className="w-full h-full flex flex-col items-center justify-center p-4">
-            <h3 className="text-[#1E3A8A] text-xl font-bold mb-4 drop-shadow-sm">
+            <h3 className="text-[#1E3A8A] text-xl font-bold mb-2 drop-shadow-sm">
                 Our Memories
             </h3>
 
-            {/* Strict Horizontal Scroll Container */}
-            {/* max-w-full ensures it doesn't overflow parent width */}
-            {/* overflow-x-auto enables side scrolling */}
+            {/* Polaroid Frame Container */}
+            {/* Strictly Sized Box simulating a phone screen or frame */}
             <div
-                className="w-full max-w-5xl flex items-center gap-4 overflow-x-auto pb-6 px-4"
+                className="relative bg-white p-4 shadow-2xl rounded-xl border border-gray-100"
                 style={{
-                    scrollbarWidth: 'none',
-                    msOverflowStyle: 'none',
-                    WebkitOverflowScrolling: 'touch'
+                    width: '320px',
+                    height: '480px',
+                    maxWidth: '90vw',
+                    maxHeight: '60vh'
                 }}
             >
-                {items.map((item, index) => (
-                    <div
-                        key={index}
-                        className="flex-shrink-0 relative group"
-                        style={{ height: '300px', width: '220px' }} // Fixed dimensions for consistency
-                    >
-                        <div className="w-full h-full bg-white p-2 shadow-lg rounded-lg transform transition-transform duration-300 hover:scale-105 hover:-rotate-2">
-                            <div className="w-full h-full overflow-hidden rounded-md bg-gray-100">
-                                <img
-                                    src={item.src}
-                                    alt={item.alt}
-                                    className="w-full h-full object-cover"
-                                    loading="lazy"
-                                    draggable={false}
-                                />
-                            </div>
-
-                            {/* Simple Caption Overlay */}
-                            <div className="absolute bottom-4 left-0 w-full text-center">
-                                <span className="bg-white/80 backdrop-blur-sm px-2 py-1 rounded-full text-[10px] text-slate-700 font-bold shadow-sm">
+                {/* Inner Scroll Area */}
+                <div
+                    className="w-full h-full overflow-x-auto flex items-center gap-4 snap-x snap-mandatory"
+                    style={{
+                        scrollbarWidth: 'none',
+                        msOverflowStyle: 'none',
+                    }}
+                >
+                    {items.map((item, index) => (
+                        <div
+                            key={index}
+                            className="flex-shrink-0 w-full h-full snap-center flex items-center justify-center p-2"
+                        >
+                            <div className="w-full h-full flex flex-col items-center bg-gray-50 rounded-lg shadow-inner p-2 border border-gray-100">
+                                <div className="flex-1 w-full overflow-hidden rounded-md bg-white flex items-center justify-center">
+                                    <img
+                                        src={item.src}
+                                        alt={item.alt}
+                                        className="max-w-full max-h-full object-contain pointer-events-none"
+                                        loading="lazy"
+                                    />
+                                </div>
+                                <p className="mt-2 text-center text-xs font-handwriting text-gray-600">
                                     {item.alt || `Memory ${index + 1}`}
-                                </span>
+                                </p>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
 
-                {/* End spacer */}
-                <div className="w-4 flex-shrink-0" />
+                {/* Decorative Elements */}
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-pink-200 w-16 h-4 opacity-50 rounded-sm rotate-1"></div>
             </div>
 
-            <p className="text-[#1E3A8A]/50 text-xs mt-2 animate-pulse">
-                ← Swipe to see more →
+            <p className="text-[#1E3A8A]/50 text-xs mt-4 animate-pulse">
+                ← Swipe to browse →
             </p>
         </div>
     );
