@@ -115,8 +115,8 @@ function App() {
               </motion.div>
             </div>
 
-            {/* Footer Static */}
-            <div className="absolute bottom-24 text-center pointer-events-none opacity-40">
+            {/* Footer — sits just above the dashboard dock */}
+            <div className="fixed bottom-20 left-0 right-0 text-center pointer-events-none opacity-40 z-[5]">
               <p className="text-[10px] font-medium text-[#1E3A8A]">
                 © 2026 Developed with 💙 by Max for his Bub
               </p>
