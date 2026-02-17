@@ -177,25 +177,25 @@ function App() {
             )}
 
             {activeModule === 'letter' && (
-              <div className="w-full h-full flex items-center justify-center">
+              <div style={{ flex: 1, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Message />
               </div>
             )}
 
             {activeModule === 'connection' && (
-              <div className="w-full h-full bg-white/30 backdrop-blur-md rounded-3xl overflow-hidden">
+              <div style={{ flex: 1, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Connection />
               </div>
             )}
 
             {activeModule === 'music' && (
-              <div className="w-full h-full absolute inset-0">
+              <div style={{ flex: 1, width: '100%', position: 'relative' }}>
                 <MusicPlayer3D />
               </div>
             )}
 
             {activeModule === 'chubba' && (
-              <div className="w-full h-full flex items-center justify-center bg-black/80">
+              <div style={{ flex: 1, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.8)' }}>
                 <Chubba videoSrc={assets.chubbaVideo} onClose={() => setActiveModule(null)} />
               </div>
             )}

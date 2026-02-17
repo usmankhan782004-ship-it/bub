@@ -47,7 +47,7 @@ const MusicPlayer3D = () => {
     }, []);
 
     return (
-        <div style={{ width: '100vw', height: '100vh', background: '#E0F7FA', position: 'relative' }}>
+        <div style={{ width: '100%', height: '100%', background: '#E0F7FA', position: 'relative' }}>
             <Canvas dpr={[1, 2]} performance={{ min: 0.5 }}> {/* Increased quality for retina screens */}
                 {/* Isometric Camera View */}
                 <OrthographicCamera

@@ -66,7 +66,7 @@ const Gatekeeper = ({ onEnter }) => {
                             y: hasJumped ? noBtnPosition.y : 0,
                             transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)'
                         }}
-                        onclick={moveNoButton} // Backups
+                        onClick={moveNoButton} // Fixed: was lowercase 'onclick'
                         onMouseDown={moveNoButton}
                         onTouchStart={moveNoButton} // Critical for Mobile
                         onMouseEnter={moveNoButton} // Desktop

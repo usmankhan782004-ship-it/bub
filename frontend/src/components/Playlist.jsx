@@ -11,16 +11,15 @@ const TRACKS = [
         color: "bg-pink-100"
     },
     {
-        title: "Better Days",
-        artist: "LAKEY INSPIRED",
-        src: "https://soundcloud.com/lakeyinspired/better-days/download",
-        backupSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+        title: "Dreamy Vibes",
+        artist: "SoundHelix",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
         color: "bg-blue-100"
     },
     {
-        title: "Sweet Memories",
-        artist: "Bensound",
-        src: "https://www.bensound.com/bensound-music/bensound-love.mp3",
+        title: "Gentle Waves",
+        artist: "SoundHelix",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
         color: "bg-yellow-100"
     }
 ];
