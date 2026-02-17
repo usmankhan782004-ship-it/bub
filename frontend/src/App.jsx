@@ -211,28 +211,58 @@ function App() {
                - Always visible in background
                - Softens/Blurs when Overlay is active (handled by Overlay backdrop)
             */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center z-10 pointer-events-auto">
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 10,
+            pointerEvents: 'auto',
+            paddingBottom: '100px', /* Offset for dashboard dock at bottom */
+          }}>
             <motion.div
-              className="w-full flex flex-col items-center justify-center shrink-0"
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '8px',
+              }}
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-3xl font-bold tracking-wider text-[#1E3A8A] drop-shadow-sm uppercase">For my Bub</h2>
+              <h2 style={{
+                fontSize: '28px',
+                fontWeight: '800',
+                letterSpacing: '0.15em',
+                color: '#1E3A8A',
+                textTransform: 'uppercase',
+                textShadow: '0 1px 3px rgba(255,255,255,0.5)',
+              }}>
+                For my Bub
+              </h2>
               <motion.div
                 animate={{
                   scale: [1, 1.1, 1],
-                  rotate: [0, 5, -5, 0]
+                  rotate: [0, 5, -5, 0],
                 }}
-                transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                className="mt-2"
+                transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
               >
-                <Heart size={30} fill="#F472B6" stroke="#1E3A8A" strokeWidth={1.5} />
+                <Heart size={26} fill="#F472B6" stroke="#1E3A8A" strokeWidth={1.5} />
               </motion.div>
             </motion.div>
 
-            {/* Rotating Love Quotes */}
-            <div style={{ height: '28px', overflow: 'hidden', marginTop: '12px', position: 'relative', width: '80%', maxWidth: '300px' }}>
+            {/* Rotating Love Quotes — pushed down a bit */}
+            <div style={{
+              height: '24px',
+              overflow: 'hidden',
+              marginTop: '24px',
+              position: 'relative',
+              width: '85%',
+              maxWidth: '300px',
+            }}>
               <AnimatePresence mode="wait">
                 <motion.p
                   key={quoteIndex}
@@ -241,9 +271,9 @@ function App() {
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.4 }}
                   style={{
-                    fontSize: '13px',
+                    fontSize: '12px',
                     fontStyle: 'italic',
-                    color: 'rgba(30,58,138,0.55)',
+                    color: 'rgba(30,58,138,0.45)',
                     textAlign: 'center',
                     position: 'absolute',
                     width: '100%',
@@ -254,21 +284,38 @@ function App() {
               </AnimatePresence>
             </div>
 
-            <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', color: '#1E3A8A', opacity: 0.5 }}>
-              <p style={{ fontSize: '14px' }}>Select a memory below</p>
+            {/* CTA — more breathing room */}
+            <div style={{
+              marginTop: '32px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              color: '#1E3A8A',
+              opacity: 0.4,
+              gap: '6px',
+            }}>
+              <p style={{ fontSize: '13px', fontWeight: '500' }}>Select a memory below</p>
               <motion.div
-                style={{ marginTop: '8px' }}
-                animate={{ y: [0, 10, 0] }}
+                animate={{ y: [0, 8, 0] }}
                 transition={{ repeat: Infinity, duration: 1.5 }}
               >
-                <MousePointerClick size={28} />
+                <MousePointerClick size={24} />
               </motion.div>
             </div>
 
             {/* Footer — hidden during overlays */}
             {!activeModule && (
-              <div className="fixed bottom-20 left-0 right-0 text-center pointer-events-none opacity-40 z-[5]">
-                <p className="text-[10px] font-medium text-[#1E3A8A]">
+              <div style={{
+                position: 'fixed',
+                bottom: '80px',
+                left: 0,
+                right: 0,
+                textAlign: 'center',
+                pointerEvents: 'none',
+                opacity: 0.3,
+                zIndex: 5,
+              }}>
+                <p style={{ fontSize: '9px', fontWeight: '500', color: '#1E3A8A' }}>
                   © 2026 Developed with 💙 by Max for his Bub
                 </p>
               </div>
