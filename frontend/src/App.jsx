@@ -160,7 +160,7 @@ function App() {
              - Renders the active module inside a modal sheet
           */}
           <MemoryOverlay
-            isOpen={!!activeModule}
+            isOpen={!!activeModule && activeModule !== 'music'}
             onClose={() => setActiveModule(null)}
             title={activeModule}
           >
@@ -188,11 +188,6 @@ function App() {
               </div>
             )}
 
-            {activeModule === 'music' && (
-              <div style={{ flex: 1, width: '100%', position: 'relative' }}>
-                <MusicPlayer3D />
-              </div>
-            )}
 
             {activeModule === 'chubba' && (
               <div style={{ flex: 1, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.8)' }}>
@@ -201,6 +196,48 @@ function App() {
             )}
 
           </MemoryOverlay>
+
+          {/* FULL-SCREEN MUSIC PLAYER (Z-30) — Bypasses overlay for immersive experience */}
+          <AnimatePresence>
+            {activeModule === 'music' && (
+              <motion.div
+                key="music-fullscreen"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4 }}
+                style={{
+                  position: 'fixed',
+                  inset: 0,
+                  zIndex: 30,
+                }}
+              >
+                <MusicPlayer3D />
+                {/* Back Button */}
+                <button
+                  onClick={() => setActiveModule(null)}
+                  style={{
+                    position: 'absolute',
+                    top: '16px',
+                    left: '16px',
+                    zIndex: 110,
+                    padding: '8px 16px',
+                    borderRadius: '50px',
+                    background: 'rgba(255,255,255,0.85)',
+                    backdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(255,255,255,0.5)',
+                    boxShadow: '0 2px 12px rgba(0,0,0,0.1)',
+                    color: '#1E3A8A',
+                    fontWeight: '700',
+                    fontSize: '13px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  ← Back to Memories
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* DASHBOARD (Z-50) - PERSISTENT */}
           <Dashboard setActiveModule={setActiveModule} activeModule={activeModule} />

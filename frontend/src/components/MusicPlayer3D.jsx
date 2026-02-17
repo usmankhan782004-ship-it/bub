@@ -1,7 +1,7 @@
 import React, { Suspense, useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, OrthographicCamera, ContactShadows } from '@react-three/drei';
-import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
+import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import HeartVinyl from './3d/HeartVinyl';
 import FloatingItems from './3d/FloatingItems';
 import VoxelConsole from './3d/VoxelConsole';
@@ -48,7 +48,7 @@ const MusicPlayer3D = () => {
 
     return (
         <div style={{ width: '100%', height: '100%', background: '#E0F7FA', position: 'relative' }}>
-            <Canvas dpr={[1, 2]} performance={{ min: 0.5 }}> {/* Increased quality for retina screens */}
+            <Canvas dpr={[1, 1.5]} performance={{ min: 0.5 }}>
                 {/* Isometric Camera View */}
                 <OrthographicCamera
                     makeDefault
@@ -101,11 +101,11 @@ const MusicPlayer3D = () => {
                         {/* Particle Effects when Playing */}
                         {isPlaying && (
                             <Sparkles
-                                count={50}
+                                count={25}
                                 scale={12}
-                                size={4}
-                                speed={0.4}
-                                opacity={0.8}
+                                size={3}
+                                speed={0.3}
+                                opacity={0.6}
                                 color="#ff69b4"
                                 position={[0, 2, 0]}
                             />
@@ -117,18 +117,18 @@ const MusicPlayer3D = () => {
                 </Suspense>
 
                 <OrbitControls
-                    enableZoom={false} // Disable zoom to prevent mess on mobile
+                    enableZoom={true}
                     enablePan={false}
-                    autoRotate={isPlaying} // Only rotate when playing? Or always? Let's say always for vibe, or maybe only when playing. User liked smoothness. Let's keep it always rotating slowly.
+                    autoRotate
                     autoRotateSpeed={0.5}
                     minPolarAngle={Math.PI / 4}
                     maxPolarAngle={Math.PI / 2}
+                    minZoom={15}
+                    maxZoom={45}
                 />
 
                 <EffectComposer disableNormalPass>
-                    {/* Removed TiltShift for performance */}
-                    <Bloom luminanceThreshold={0.85} mipmapBlur intensity={0.3} radius={0.2} />
-                    <Vignette eskil={false} offset={0.1} darkness={0.6} />
+                    <Bloom luminanceThreshold={0.9} mipmapBlur intensity={0.2} radius={0.15} />
                 </EffectComposer>
             </Canvas>
 
