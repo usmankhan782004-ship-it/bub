@@ -27,17 +27,20 @@ function App() {
   const [quoteIndex, setQuoteIndex] = useState(0);
 
   const LOVE_QUOTES = [
-    "You're my favorite notification 📱",
-    "I love you more than Wi-Fi 📶",
-    "You're the reason I smile at my phone 😊",
-    "Every day with you is my favorite day ✨",
-    "You had me at your first text 💌",
-    "My heart does a little dance when I see your name 💃",
-    "You're my 11:11 wish come true 🌠",
-    "Distance means nothing when someone means everything 🌍",
-    "You're the peanut butter to my jelly 🥜",
-    "I'd swipe right on you every time 💕",
+    "you're literally my whole feed",
+    "no cause why do i miss you already",
+    "us > everyone else, no debate",
+    "POV: i found my person",
+    "she's beauty she's grace she's my bub",
+    "rent free in my head since day 1",
+    "not me smiling at my phone again",
+    "lowkey obsessed w you ngl",
+    "you understood the assignment fr",
+    "main character energy but make it us",
+    "bestie turned soulmate arc",
+    "me 🤝 you against the world",
   ];
+  const [quotePos, setQuotePos] = useState({ top: '15%', left: '10%' });
 
   const CHUBBA_MESSAGES = [
     "Oop! Chubba is here! >.< ",
@@ -85,12 +88,23 @@ function App() {
     return () => { clearTimeout(showTimer); clearInterval(moveInterval); };
   }, [entered]);
 
-  // Rotating love quotes
+  // Rotating love quotes — random position each cycle
   useEffect(() => {
     if (!entered) return;
-    const iv = setInterval(() => {
+    const safeSpots = [
+      { top: '12%', left: '8%' },
+      { top: '14%', right: '8%', left: 'auto' },
+      { top: '38%', left: '6%' },
+      { top: '40%', right: '6%', left: 'auto' },
+      { top: '60%', left: '10%' },
+      { top: '58%', right: '10%', left: 'auto' },
+    ];
+    const cycle = () => {
       setQuoteIndex(i => (i + 1) % LOVE_QUOTES.length);
-    }, 4000);
+      setQuotePos(safeSpots[Math.floor(Math.random() * safeSpots.length)]);
+    };
+    cycle();
+    const iv = setInterval(cycle, 5000);
     return () => clearInterval(iv);
   }, [entered]);
 
@@ -254,37 +268,7 @@ function App() {
               </motion.div>
             </motion.div>
 
-            {/* Rotating Love Quotes — pushed down a bit */}
-            <div style={{
-              height: '24px',
-              overflow: 'hidden',
-              marginTop: '24px',
-              position: 'relative',
-              width: '85%',
-              maxWidth: '300px',
-            }}>
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={quoteIndex}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.4 }}
-                  style={{
-                    fontSize: '12px',
-                    fontStyle: 'italic',
-                    color: 'rgba(30,58,138,0.45)',
-                    textAlign: 'center',
-                    position: 'absolute',
-                    width: '100%',
-                  }}
-                >
-                  {LOVE_QUOTES[quoteIndex]}
-                </motion.p>
-              </AnimatePresence>
-            </div>
-
-            {/* CTA — more breathing room */}
+            {/* CTA */}
             <div style={{
               marginTop: '32px',
               display: 'flex',
@@ -397,6 +381,42 @@ function App() {
               </motion.div>
             )}
           </AnimatePresence>
+
+          {/* Floating Gen-Z Quote Bubbles */}
+          {!activeModule && (
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={quoteIndex}
+                initial={{ opacity: 0, scale: 0.7 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.7 }}
+                transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+                style={{
+                  position: 'fixed',
+                  ...quotePos,
+                  zIndex: 40,
+                  pointerEvents: 'none',
+                  maxWidth: '200px',
+                }}
+              >
+                <div style={{
+                  padding: '6px 14px',
+                  borderRadius: '20px',
+                  background: 'rgba(255,255,255,0.7)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255,255,255,0.5)',
+                  boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
+                  fontSize: '11px',
+                  fontWeight: '600',
+                  color: 'rgba(30,58,138,0.5)',
+                  whiteSpace: 'nowrap',
+                  fontStyle: 'italic',
+                }}>
+                  {LOVE_QUOTES[quoteIndex]}
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          )}
 
           {/* 
              MEMORY OVERLAYS (Z-40) 
