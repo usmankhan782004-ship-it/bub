@@ -18,6 +18,7 @@ import Chubba from './pages/Chubba';
 import MusicPlayer3D from './components/MusicPlayer3D';
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
   const [entered, setEntered] = useState(false);
   const [activeModule, setActiveModule] = useState(null);
   const [showChubbaPeek, setShowChubbaPeek] = useState(false);
@@ -70,6 +71,12 @@ function App() {
     return () => { clearTimeout(showTimer); clearInterval(moveInterval); };
   }, [entered]);
 
+  // Loading screen timer
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 2200);
+    return () => clearTimeout(timer);
+  }, []);
+
   // Assets
   const assets = {
     chubbaVideo: '/assets/vid.mp4',
@@ -111,11 +118,70 @@ function App() {
 
       <TouchEffect />
 
-      {!entered ? (
+      <AnimatePresence mode="wait">
+        {/* Heartbeat Loading Screen */}
+        {isLoading && (
+          <motion.div
+            key="loading"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6 }}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'linear-gradient(135deg, #FDF2F8, #EBF4FF, #FDF2F8)',
+              zIndex: 9999,
+            }}
+          >
+            <motion.div
+              animate={{ scale: [1, 1.25, 1, 1.25, 1] }}
+              transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
+              style={{ fontSize: '48px', filter: 'drop-shadow(0 0 16px rgba(244,114,182,0.4))' }}
+            >
+              💗
+            </motion.div>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 1, 0.5, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              style={{
+                marginTop: '16px',
+                fontSize: '13px',
+                fontWeight: '600',
+                color: '#1E3A8A',
+                letterSpacing: '0.15em',
+                textTransform: 'lowercase',
+              }}
+            >
+              loading love...
+            </motion.p>
+            <div style={{ display: 'flex', gap: '6px', marginTop: '20px' }}>
+              {[0, 1, 2].map((i) => (
+                <motion.div
+                  key={i}
+                  animate={{ opacity: [0.2, 1, 0.2] }}
+                  transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
+                  style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#F472B6' }}
+                />
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Gatekeeper */}
+      {!isLoading && !entered && (
         <AnimatePresence mode="wait">
           <Gatekeeper key="gatekeeper" onEnter={() => setEntered(true)} />
         </AnimatePresence>
-      ) : (
+      )}
+
+      {/* Main Hub */}
+      {!isLoading && entered && (
         <>
           {/* 
                PERSISTENT HOME "HUB" (Z-0 to Z-10) 
