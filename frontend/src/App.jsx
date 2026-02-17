@@ -267,43 +267,6 @@ function App() {
                 <Heart size={26} fill="#F472B6" stroke="#1E3A8A" strokeWidth={1.5} />
               </motion.div>
             </motion.div>
-
-            {/* CTA */}
-            <div style={{
-              marginTop: '32px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              color: '#1E3A8A',
-              opacity: 0.4,
-              gap: '6px',
-            }}>
-              <p style={{ fontSize: '13px', fontWeight: '500' }}>Select a memory below</p>
-              <motion.div
-                animate={{ y: [0, 8, 0] }}
-                transition={{ repeat: Infinity, duration: 1.5 }}
-              >
-                <MousePointerClick size={24} />
-              </motion.div>
-            </div>
-
-            {/* Footer — hidden during overlays */}
-            {!activeModule && (
-              <div style={{
-                position: 'fixed',
-                bottom: '80px',
-                left: 0,
-                right: 0,
-                textAlign: 'center',
-                pointerEvents: 'none',
-                opacity: 0.3,
-                zIndex: 5,
-              }}>
-                <p style={{ fontSize: '9px', fontWeight: '500', color: '#1E3A8A' }}>
-                  © 2026 Developed with 💙 by Max for his Bub
-                </p>
-              </div>
-            )}
           </div>
 
           {/* Chubba Peek-a-boo — pops up at random spots */}
