@@ -231,40 +231,64 @@ function App() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
+            paddingTop: '28vh',
             zIndex: 10,
             pointerEvents: 'auto',
-            paddingBottom: '100px', /* Offset for dashboard dock at bottom */
           }}>
             <motion.div
               style={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                gap: '8px',
+                gap: '6px',
               }}
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.6 }}
             >
+              {/* Big emoji heart */}
+              <motion.div
+                animate={{ scale: [1, 1.15, 1] }}
+                transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
+                style={{ fontSize: '42px', lineHeight: 1, marginBottom: '8px' }}
+              >
+                💕
+              </motion.div>
+
               <h2 style={{
-                fontSize: '28px',
+                fontSize: '32px',
                 fontWeight: '800',
-                letterSpacing: '0.15em',
-                color: '#1E3A8A',
+                letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                textShadow: '0 1px 3px rgba(255,255,255,0.5)',
+                background: 'linear-gradient(135deg, #1E3A8A, #7C3AED, #EC4899)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                textShadow: 'none',
               }}>
                 For my Bub
               </h2>
+
+              <p style={{
+                fontSize: '12px',
+                color: 'rgba(30,58,138,0.45)',
+                fontWeight: '500',
+                marginTop: '4px',
+                letterSpacing: '0.05em',
+              }}>
+                a little place just for us
+              </p>
+
               <motion.div
                 animate={{
-                  scale: [1, 1.1, 1],
-                  rotate: [0, 5, -5, 0],
+                  scale: [1, 1.2, 1],
+                  rotate: [0, 8, -8, 0],
                 }}
-                transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+                transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }}
+                style={{ marginTop: '10px' }}
               >
-                <Heart size={26} fill="#F472B6" stroke="#1E3A8A" strokeWidth={1.5} />
+                <Heart size={24} fill="#F472B6" stroke="none" />
               </motion.div>
             </motion.div>
           </div>
