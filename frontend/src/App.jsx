@@ -16,6 +16,7 @@ import Message from './pages/Message';
 import Connection from './pages/Connection';
 import Chubba from './pages/Chubba';
 import MusicPlayer3D from './components/MusicPlayer3D';
+import CoupleScene from './components/3d/CoupleScene';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -217,13 +218,31 @@ function App() {
         </AnimatePresence>
       )}
 
+
+
       {/* Main Hub */}
       {!isLoading && entered && (
         <>
           {/* 
-               PERSISTENT HOME "HUB" (Z-0 to Z-10) 
-               - Always visible in background
-               - Softens/Blurs when Overlay is active (handled by Overlay backdrop)
+               3D VOXEL COUPLE (Z-2)
+               - Floats behind the text
+            */}
+          <div style={{
+            position: 'absolute',
+            top: '20%',
+            left: 0,
+            right: 0,
+            height: '400px', // confined height
+            zIndex: 2,
+            pointerEvents: 'none', // let clicks pass through to potential interactive elements
+            opacity: 0.9,
+          }}>
+            <CoupleScene />
+          </div>
+
+          {/* 
+               PERSISTENT HOME "HUB" (Z-5) 
+               - Always visible in foreground
             */}
           <div style={{
             position: 'absolute',
