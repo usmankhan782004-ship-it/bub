@@ -55,7 +55,7 @@ const DashboardTile = ({ icon, label, onClick, isActive, color }) => {
                 }}
             >
                 <div style={{
-                    color: isActive ? color : 'rgba(100, 116, 139, 0.9)',
+                    color: isActive ? color : 'rgba(30, 58, 138, 0.7)',
                     filter: isActive ? `drop-shadow(0 0 6px ${color})` : 'none',
                     transition: 'all 0.3s ease',
                 }}>
@@ -67,7 +67,7 @@ const DashboardTile = ({ icon, label, onClick, isActive, color }) => {
             <span style={{
                 fontSize: '9px',
                 fontWeight: isActive ? '700' : '500',
-                color: isActive ? 'white' : 'rgba(255, 255, 255, 0.5)',
+                color: isActive ? color : 'rgba(30, 58, 138, 0.5)',
                 letterSpacing: '0.03em',
                 lineHeight: 1,
                 transition: 'all 0.3s ease',
@@ -77,24 +77,26 @@ const DashboardTile = ({ icon, label, onClick, isActive, color }) => {
             </span>
 
             {/* Active Indicator Dot */}
-            {isActive && (
-                <motion.div
-                    layoutId="activeDot"
-                    style={{
-                        width: '4px',
-                        height: '4px',
-                        borderRadius: '50%',
-                        background: color,
-                        boxShadow: `0 0 6px ${color}`,
-                        position: 'absolute',
-                        bottom: '-6px',
-                    }}
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-                />
-            )}
-        </motion.button>
+            {
+                isActive && (
+                    <motion.div
+                        layoutId="activeDot"
+                        style={{
+                            width: '4px',
+                            height: '4px',
+                            borderRadius: '50%',
+                            background: color,
+                            boxShadow: `0 0 6px ${color}`,
+                            position: 'absolute',
+                            bottom: '-6px',
+                        }}
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+                    />
+                )
+            }
+        </motion.button >
     );
 };
 
@@ -110,7 +112,7 @@ const Dashboard = ({ setActiveModule, activeModule }) => {
 
     return (
         <motion.nav
-            className="fixed bottom-8 left-1/2 transform -translate-x-1/2 pointer-events-none"
+            className="fixed bottom-4 left-1/2 transform -translate-x-1/2 pointer-events-none"
             style={{ zIndex: 50 }}
             variants={containerVariants}
             initial="hidden"
@@ -119,11 +121,11 @@ const Dashboard = ({ setActiveModule, activeModule }) => {
             <div
                 className="flex gap-2 px-4 py-3 rounded-[28px] pointer-events-auto shadow-2xl items-end"
                 style={{
-                    background: 'rgba(15, 23, 42, 0.45)',
+                    background: 'rgba(255, 255, 255, 0.15)',
                     backdropFilter: 'blur(24px)',
                     WebkitBackdropFilter: 'blur(24px)',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.1)',
+                    border: '1px solid rgba(255, 255, 255, 0.35)',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.2)',
                 }}
             >
                 <DashboardTile
