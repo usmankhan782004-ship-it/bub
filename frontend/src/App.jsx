@@ -226,12 +226,12 @@ function App() {
                - Softens/Blurs when Overlay is active (handled by Overlay backdrop)
             */}
           <div style={{
-            position: 'absolute',
-            top: '50%',
+            position: 'fixed',
+            top: '25%',
             left: '50%',
-            transform: 'translate(-50%, -70%)',
+            transform: 'translateX(-50%)',
             zIndex: 5,
-            pointerEvents: 'auto',
+            pointerEvents: 'none',
             textAlign: 'center',
           }}>
             <motion.div
