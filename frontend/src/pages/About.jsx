@@ -8,7 +8,7 @@ import { Heart, Clock, Sparkles } from 'lucide-react';
   IMPORTANT: Update START_DATE to Max & Josephine's actual anniversary.
   Format: new Date('YYYY-MM-DDT00:00:00')
 */
-const START_DATE = new Date('2024-06-15T00:00:00'); // ← UPDATE THIS
+const START_DATE = new Date('2024-12-25T00:00:00'); // Late December 2024
 
 const useRelationshipTimer = (startDate) => {
     const [elapsed, setElapsed] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -44,17 +44,17 @@ const CounterUnit = ({ value, label }) => (
         <span style={{
             fontSize: '28px',
             fontWeight: '800',
-            color: 'white',
+            color: '#1E3A8A',
             fontVariantNumeric: 'tabular-nums',
             lineHeight: 1,
-            textShadow: '0 0 20px rgba(244, 114, 182, 0.4)',
+            textShadow: '0 1px 2px rgba(0,0,0,0.1)',
         }}>
             {String(value).padStart(label === 'days' ? 1 : 2, '0')}
         </span>
         <span style={{
             fontSize: '9px',
             fontWeight: '600',
-            color: 'rgba(255,255,255,0.4)',
+            color: '#1E3A8A',
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
             marginTop: '4px',
@@ -68,7 +68,7 @@ const Separator = () => (
     <span style={{
         fontSize: '20px',
         fontWeight: '300',
-        color: 'rgba(255,255,255,0.2)',
+        color: 'rgba(30,58,138,0.3)',
         alignSelf: 'flex-start',
         marginTop: '4px',
     }}>:</span>
@@ -95,14 +95,15 @@ const About = () => {
                 <h1 style={{
                     fontSize: '28px',
                     fontWeight: '800',
-                    color: 'white',
+                    color: '#1E3A8A',
                     marginBottom: '4px',
+                    textShadow: '0 1px 3px rgba(255,255,255,0.8)',
                 }}>
                     Welcome Home 🏡
                 </h1>
                 <p style={{
                     fontSize: '13px',
-                    color: 'rgba(255,255,255,0.5)',
+                    color: 'rgba(30,58,138,0.7)',
                 }}>
                     A little corner of the internet, just for us
                 </p>
@@ -114,11 +115,13 @@ const About = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2 }}
                 style={{
-                    background: 'rgba(255,255,255,0.08)',
+                    background: 'rgba(255,255,255,0.5)',
+                    backdropFilter: 'blur(16px)',
                     borderRadius: '24px',
                     padding: '24px 16px',
-                    border: '1px solid rgba(255,255,255,0.12)',
+                    border: '1px solid rgba(255,255,255,0.6)',
                     textAlign: 'center',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
                 }}
             >
                 <div style={{
@@ -132,7 +135,7 @@ const About = () => {
                     <span style={{
                         fontSize: '10px',
                         fontWeight: '700',
-                        color: 'rgba(255,255,255,0.4)',
+                        color: 'rgba(30,58,138,0.6)',
                         textTransform: 'uppercase',
                         letterSpacing: '0.15em',
                     }}>
@@ -176,7 +179,7 @@ const About = () => {
                 }}
             >
                 <p style={{
-                    color: 'rgba(255,255,255,0.75)',
+                    color: '#1E3A8A',
                     fontSize: '15px',
                     lineHeight: '1.7',
                 }}>
@@ -184,7 +187,7 @@ const About = () => {
                     A place where we can always be close, no matter how many miles are in between.
                 </p>
                 <p style={{
-                    color: 'rgba(255,255,255,0.6)',
+                    color: 'rgba(30,58,138,0.8)',
                     fontSize: '14px',
                     lineHeight: '1.7',
                 }}>
@@ -200,15 +203,17 @@ const About = () => {
                 style={{
                     padding: '16px 20px',
                     borderRadius: '20px',
-                    background: 'rgba(244, 114, 182, 0.08)',
-                    border: '1px solid rgba(244, 114, 182, 0.15)',
+                    background: 'rgba(255, 255, 255, 0.45)',
+                    backdropFilter: 'blur(12px)',
+                    border: '1px solid rgba(244, 114, 182, 0.25)',
                     textAlign: 'center',
+                    boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
                 }}
             >
-                <Sparkles size={14} color="rgba(244,114,182,0.5)" style={{ margin: '0 auto 8px' }} />
+                <Sparkles size={14} color="#F472B6" style={{ margin: '0 auto 8px' }} />
                 <p style={{
                     fontSize: '13px',
-                    color: 'rgba(255,255,255,0.6)',
+                    color: 'rgba(30,58,138,0.7)',
                     fontStyle: 'italic',
                     lineHeight: '1.6',
                 }}>
