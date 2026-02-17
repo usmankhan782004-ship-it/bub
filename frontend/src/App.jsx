@@ -190,7 +190,7 @@ function App() {
 
 
             {activeModule === 'chubba' && (
-              <div style={{ flex: 1, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.8)' }}>
+              <div style={{ flex: 1, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(15,23,42,0.85)', backdropFilter: 'blur(12px)' }}>
                 <Chubba videoSrc={assets.chubbaVideo} onClose={() => setActiveModule(null)} />
               </div>
             )}

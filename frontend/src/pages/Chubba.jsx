@@ -1,54 +1,148 @@
 import { motion } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, Volume2 } from 'lucide-react';
+import { useRef, useState } from 'react';
 
 const Chubba = ({ videoSrc, onClose }) => {
-    return (
-        <div className="flex flex-col items-center justify-center w-full h-full text-white relative p-4">
+    const videoRef = useRef(null);
+    const [hasInteracted, setHasInteracted] = useState(false);
 
+    // iOS requires a user gesture to unmute — handle first tap
+    const handlePlay = () => {
+        if (videoRef.current && !hasInteracted) {
+            videoRef.current.muted = false;
+            videoRef.current.play().catch(() => { });
+            setHasInteracted(true);
+        }
+    };
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '100%',
+                height: '100%',
+                position: 'relative',
+                padding: '16px',
+            }}
+            onClick={handlePlay}
+        >
             {/* Close Button */}
             <button
-                onClick={onClose}
-                className="absolute top-4 right-4 z-50 p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors"
+                onClick={(e) => { e.stopPropagation(); onClose(); }}
+                style={{
+                    position: 'absolute',
+                    top: '12px',
+                    right: '12px',
+                    zIndex: 50,
+                    padding: '8px',
+                    background: 'rgba(255,255,255,0.15)',
+                    borderRadius: '50%',
+                    border: 'none',
+                    cursor: 'pointer',
+                    backdropFilter: 'blur(8px)',
+                    color: 'white',
+                    transition: 'background 0.2s',
+                }}
             >
-                <X size={24} />
+                <X size={20} />
             </button>
 
             {/* Title */}
-            <h2 className="text-2xl font-bold mb-4 text-[#32CD32] drop-shadow-lg text-center animate-pulse">
-                Happy Birthday Chubba! 🐛
-            </h2>
-
-            {/* Video Container (Strict 9/16 Portrait) */}
-            <div
+            <motion.h2
+                initial={{ y: -10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
                 style={{
-                    width: '90%',
-                    maxWidth: '350px',
-                    margin: '0 auto',
-                    aspectRatio: '9/16',
-                    borderRadius: '20px',
-                    overflow: 'hidden',
-                    boxShadow: '0 0 20px rgba(50, 205, 50, 0.5)', // Neon Glow
-                    background: '#000'
+                    fontSize: '20px',
+                    fontWeight: '800',
+                    color: '#86EFAC',
+                    textShadow: '0 0 12px rgba(50,205,50,0.4)',
+                    textAlign: 'center',
+                    marginBottom: '12px',
                 }}
             >
+                Happy Birthday Chubba! 🐛
+            </motion.h2>
+
+            {/* Video Container */}
+            <div style={{
+                width: '85%',
+                maxWidth: '300px',
+                aspectRatio: '9/16',
+                borderRadius: '20px',
+                overflow: 'hidden',
+                boxShadow: '0 0 24px rgba(134,239,172,0.3), 0 8px 32px rgba(0,0,0,0.2)',
+                border: '2px solid rgba(134,239,172,0.2)',
+                position: 'relative',
+            }}>
                 <video
+                    ref={videoRef}
                     src={videoSrc}
                     style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: 'cover'
+                        objectFit: 'cover',
+                        display: 'block',
                     }}
                     autoPlay
                     muted
                     loop
-                    playsInline /* CRITICAL for iPhone */
+                    playsInline
+                    preload="auto"
                 />
+
+                {/* Tap to unmute hint */}
+                {!hasInteracted && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 1 }}
+                        style={{
+                            position: 'absolute',
+                            bottom: '12px',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            padding: '6px 12px',
+                            borderRadius: '20px',
+                            background: 'rgba(0,0,0,0.5)',
+                            backdropFilter: 'blur(8px)',
+                            color: 'white',
+                            fontSize: '11px',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                        }}
+                    >
+                        <Volume2 size={12} />
+                        Tap to unmute
+                    </motion.div>
+                )}
             </div>
 
-            <p className="mt-4 text-center text-sm opacity-80 max-w-[80%]">
-                The real boss has arrived.
-            </p>
-        </div>
+            {/* Caption */}
+            <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+                style={{
+                    marginTop: '12px',
+                    textAlign: 'center',
+                    fontSize: '13px',
+                    color: 'rgba(255,255,255,0.6)',
+                    fontStyle: 'italic',
+                }}
+            >
+                The real boss has arrived. 👑
+            </motion.p>
+        </motion.div>
     );
 };
 
