@@ -227,14 +227,12 @@ function App() {
             */}
           <div style={{
             position: 'absolute',
-            inset: 0,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            paddingTop: '28vh',
-            zIndex: 10,
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -70%)',
+            zIndex: 5,
             pointerEvents: 'auto',
+            textAlign: 'center',
           }}>
             <motion.div
               style={{
