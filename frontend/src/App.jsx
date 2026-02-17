@@ -16,7 +16,6 @@ import Message from './pages/Message';
 import Connection from './pages/Connection';
 import Chubba from './pages/Chubba';
 import MusicPlayer3D from './components/MusicPlayer3D';
-import CoupleScene from './components/3d/CoupleScene';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -224,23 +223,6 @@ function App() {
       {!isLoading && entered && (
         <>
           {/* 
-               3D VOXEL COUPLE (Z-2)
-               - Floats behind the text
-            */}
-          <div style={{
-            position: 'absolute',
-            top: '20%',
-            left: 0,
-            right: 0,
-            height: '400px', // confined height
-            zIndex: 2,
-            pointerEvents: 'none', // let clicks pass through to potential interactive elements
-            opacity: 0.9,
-          }}>
-            <CoupleScene />
-          </div>
-
-          {/* 
                PERSISTENT HOME "HUB" (Z-5) 
                - Always visible in foreground
             */}
@@ -251,7 +233,7 @@ function App() {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            paddingBottom: '160px',
+            paddingBottom: '160px', /* Ensure clearance above dock */
             zIndex: 5,
             pointerEvents: 'none',
           }}>
@@ -260,57 +242,35 @@ function App() {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                gap: '6px',
+                gap: '8px',
               }}
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.5 }}
             >
-              {/* Big emoji heart */}
-              <motion.div
-                animate={{ scale: [1, 1.15, 1] }}
-                transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
-                style={{ fontSize: '42px', lineHeight: 1, marginBottom: '8px' }}
-              >
-                💕
-              </motion.div>
-
               <h2 style={{
-                fontSize: '32px',
+                fontSize: '28px',
                 fontWeight: '800',
-                letterSpacing: '0.12em',
+                letterSpacing: '0.15em',
+                color: '#1E3A8A',
                 textTransform: 'uppercase',
-                background: 'linear-gradient(135deg, #1E3A8A, #7C3AED, #EC4899)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                textShadow: 'none',
+                textShadow: '0 1px 3px rgba(255,255,255,0.5)',
               }}>
                 For my Bub
               </h2>
-
-              <p style={{
-                fontSize: '12px',
-                color: 'rgba(30,58,138,0.45)',
-                fontWeight: '500',
-                marginTop: '4px',
-                letterSpacing: '0.05em',
-              }}>
-                a little place just for us
-              </p>
-
               <motion.div
                 animate={{
-                  scale: [1, 1.2, 1],
-                  rotate: [0, 8, -8, 0],
+                  scale: [1, 1.1, 1],
+                  rotate: [0, 5, -5, 0],
                 }}
-                transition={{ repeat: Infinity, duration: 2.5, ease: 'easeInOut' }}
-                style={{ marginTop: '10px' }}
+                transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
               >
-                <Heart size={24} fill="#F472B6" stroke="none" />
+                <Heart size={26} fill="#F472B6" stroke="#1E3A8A" strokeWidth={1.5} />
               </motion.div>
             </motion.div>
           </div>
+
+
 
           {/* Chubba Peek-a-boo — pops up at random spots */}
           <AnimatePresence>
@@ -389,40 +349,42 @@ function App() {
           </AnimatePresence>
 
           {/* Floating Gen-Z Quote Bubbles */}
-          {!activeModule && (
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={quoteIndex}
-                initial={{ opacity: 0, scale: 0.7 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.7 }}
-                transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-                style={{
-                  position: 'fixed',
-                  ...quotePos,
-                  zIndex: 40,
-                  pointerEvents: 'none',
-                  maxWidth: '200px',
-                }}
-              >
-                <div style={{
-                  padding: '6px 14px',
-                  borderRadius: '20px',
-                  background: 'rgba(255,255,255,0.7)',
-                  backdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(255,255,255,0.5)',
-                  boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
-                  fontSize: '11px',
-                  fontWeight: '600',
-                  color: 'rgba(30,58,138,0.5)',
-                  whiteSpace: 'nowrap',
-                  fontStyle: 'italic',
-                }}>
-                  {LOVE_QUOTES[quoteIndex]}
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          )}
+          {
+            !activeModule && (
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={quoteIndex}
+                  initial={{ opacity: 0, scale: 0.7 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.7 }}
+                  transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+                  style={{
+                    position: 'fixed',
+                    ...quotePos,
+                    zIndex: 40,
+                    pointerEvents: 'none',
+                    maxWidth: '200px',
+                  }}
+                >
+                  <div style={{
+                    padding: '6px 14px',
+                    borderRadius: '20px',
+                    background: 'rgba(255,255,255,0.7)',
+                    backdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(255,255,255,0.5)',
+                    boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
+                    fontSize: '11px',
+                    fontWeight: '600',
+                    color: 'rgba(30,58,138,0.5)',
+                    whiteSpace: 'nowrap',
+                    fontStyle: 'italic',
+                  }}>
+                    {LOVE_QUOTES[quoteIndex]}
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            )
+          }
 
           {/* 
              MEMORY OVERLAYS (Z-40) 
@@ -509,12 +471,15 @@ function App() {
           </AnimatePresence>
 
           {/* DASHBOARD (Z-50) - Hidden during music for immersive experience */}
-          {activeModule !== 'music' && (
-            <Dashboard setActiveModule={setActiveModule} activeModule={activeModule} />
-          )}
+          {
+            activeModule !== 'music' && (
+              <Dashboard setActiveModule={setActiveModule} activeModule={activeModule} />
+            )
+          }
         </>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }
 
