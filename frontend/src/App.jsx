@@ -128,7 +128,7 @@ function App() {
 
   return (
     <div
-      className="main-container transform-gpu will-change-transform"
+      className="main-container"
       style={{
         height: '100dvh',
         width: '100vw',
@@ -227,11 +227,12 @@ function App() {
             */}
           <div style={{
             position: 'absolute',
-            top: '20%',
-            left: 0,
-            right: 0,
+            inset: 0,
             display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
             justifyContent: 'center',
+            paddingBottom: '160px',
             zIndex: 5,
             pointerEvents: 'none',
           }}>
