@@ -239,8 +239,10 @@ function App() {
             )}
           </AnimatePresence>
 
-          {/* DASHBOARD (Z-50) - PERSISTENT */}
-          <Dashboard setActiveModule={setActiveModule} activeModule={activeModule} />
+          {/* DASHBOARD (Z-50) - Hidden during music for immersive experience */}
+          {activeModule !== 'music' && (
+            <Dashboard setActiveModule={setActiveModule} activeModule={activeModule} />
+          )}
         </>
       )}
     </div>
