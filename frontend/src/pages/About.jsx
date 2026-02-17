@@ -8,7 +8,7 @@ import { Heart, Clock, Sparkles } from 'lucide-react';
   IMPORTANT: Update START_DATE to Max & Josephine's actual anniversary.
   Format: new Date('YYYY-MM-DDT00:00:00')
 */
-const START_DATE = new Date('2024-12-25T00:00:00'); // Late December 2024
+const START_DATE = new Date('2025-12-25T00:00:00'); // Late December 2025
 
 const useRelationshipTimer = (startDate) => {
     const [elapsed, setElapsed] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
