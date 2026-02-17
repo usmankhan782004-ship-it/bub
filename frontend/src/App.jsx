@@ -24,6 +24,20 @@ function App() {
   const [showChubbaPeek, setShowChubbaPeek] = useState(false);
   const [chubbaPos, setChubbaPos] = useState({ top: 'auto', bottom: '110px', left: 'auto', right: '20px' });
   const [chubbaMsg, setChubbaMsg] = useState('');
+  const [quoteIndex, setQuoteIndex] = useState(0);
+
+  const LOVE_QUOTES = [
+    "You're my favorite notification 📱",
+    "I love you more than Wi-Fi 📶",
+    "You're the reason I smile at my phone 😊",
+    "Every day with you is my favorite day ✨",
+    "You had me at your first text 💌",
+    "My heart does a little dance when I see your name 💃",
+    "You're my 11:11 wish come true 🌠",
+    "Distance means nothing when someone means everything 🌍",
+    "You're the peanut butter to my jelly 🥜",
+    "I'd swipe right on you every time 💕",
+  ];
 
   const CHUBBA_MESSAGES = [
     "Oop! Chubba is here! >.< ",
@@ -69,6 +83,15 @@ function App() {
     }, 8000);
 
     return () => { clearTimeout(showTimer); clearInterval(moveInterval); };
+  }, [entered]);
+
+  // Rotating love quotes
+  useEffect(() => {
+    if (!entered) return;
+    const iv = setInterval(() => {
+      setQuoteIndex(i => (i + 1) % LOVE_QUOTES.length);
+    }, 4000);
+    return () => clearInterval(iv);
   }, [entered]);
 
   // Loading screen timer
@@ -208,23 +231,48 @@ function App() {
               </motion.div>
             </motion.div>
 
-            <div className="mt-8 flex flex-col items-center text-[#1E3A8A] opacity-60">
-              <p className="text-lg">Select a memory below</p>
+            {/* Rotating Love Quotes */}
+            <div style={{ height: '28px', overflow: 'hidden', marginTop: '12px', position: 'relative', width: '80%', maxWidth: '300px' }}>
+              <AnimatePresence mode="wait">
+                <motion.p
+                  key={quoteIndex}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.4 }}
+                  style={{
+                    fontSize: '13px',
+                    fontStyle: 'italic',
+                    color: 'rgba(30,58,138,0.55)',
+                    textAlign: 'center',
+                    position: 'absolute',
+                    width: '100%',
+                  }}
+                >
+                  {LOVE_QUOTES[quoteIndex]}
+                </motion.p>
+              </AnimatePresence>
+            </div>
+
+            <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', color: '#1E3A8A', opacity: 0.5 }}>
+              <p style={{ fontSize: '14px' }}>Select a memory below</p>
               <motion.div
-                className="mt-4"
+                style={{ marginTop: '8px' }}
                 animate={{ y: [0, 10, 0] }}
                 transition={{ repeat: Infinity, duration: 1.5 }}
               >
-                <MousePointerClick size={32} />
+                <MousePointerClick size={28} />
               </motion.div>
             </div>
 
-            {/* Footer — sits just above the dashboard dock */}
-            <div className="fixed bottom-20 left-0 right-0 text-center pointer-events-none opacity-40 z-[5]">
-              <p className="text-[10px] font-medium text-[#1E3A8A]">
-                © 2026 Developed with 💙 by Max for his Bub
-              </p>
-            </div>
+            {/* Footer — hidden during overlays */}
+            {!activeModule && (
+              <div className="fixed bottom-20 left-0 right-0 text-center pointer-events-none opacity-40 z-[5]">
+                <p className="text-[10px] font-medium text-[#1E3A8A]">
+                  © 2026 Developed with 💙 by Max for his Bub
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Chubba Peek-a-boo — pops up at random spots */}
