@@ -70,16 +70,17 @@ const Chubba = ({ videoSrc, onClose }) => {
                 Happy Birthday Chubba! 🐛
             </motion.h2>
 
-            {/* Video Container */}
+            {/* Video Container — constrained to fit screen */}
             <div style={{
-                width: '85%',
-                maxWidth: '300px',
-                aspectRatio: '9/16',
+                width: '80%',
+                maxWidth: '280px',
+                maxHeight: '55vh',
                 borderRadius: '20px',
                 overflow: 'hidden',
                 boxShadow: '0 0 24px rgba(134,239,172,0.3), 0 8px 32px rgba(0,0,0,0.2)',
                 border: '2px solid rgba(134,239,172,0.2)',
                 position: 'relative',
+                background: 'rgba(0,0,0,0.3)',
             }}>
                 <video
                     ref={videoRef}
@@ -87,7 +88,8 @@ const Chubba = ({ videoSrc, onClose }) => {
                     style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: 'cover',
+                        maxHeight: '55vh',
+                        objectFit: 'contain',
                         display: 'block',
                     }}
                     autoPlay
