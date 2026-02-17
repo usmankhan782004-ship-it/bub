@@ -21,15 +21,53 @@ function App() {
   const [entered, setEntered] = useState(false);
   const [activeModule, setActiveModule] = useState(null);
   const [showChubbaPeek, setShowChubbaPeek] = useState(false);
+  const [chubbaPos, setChubbaPos] = useState({ top: 'auto', bottom: '110px', left: 'auto', right: '20px' });
+  const [chubbaMsg, setChubbaMsg] = useState('');
 
-  // Peek Logic: 3 Second Delay
+  const CHUBBA_MESSAGES = [
+    "Oop! Chubba is here! >.< ",
+    "Feed me! 🍕",
+    "I missed you! 💕",
+    "Pat my head! 🐾",
+    "Meow~ you're cute! 😻",
+    "*purrs loudly* 🐱",
+    "Where's my treat?! 🍬",
+    "I love you both! 💗",
+    "*boop* 👉🐽",
+    "Chubba wants snuggles!",
+  ];
+
+  // Chubba peek: appears after 3s, then re-positions every 8s
   useEffect(() => {
-    if (entered) {
-      const timer = setTimeout(() => {
+    if (!entered) return;
+
+    const randomize = () => {
+      const positions = [
+        { bottom: '110px', right: '20px', top: 'auto', left: 'auto' },
+        { bottom: '110px', left: '20px', top: 'auto', right: 'auto' },
+        { top: '80px', right: '20px', bottom: 'auto', left: 'auto' },
+        { top: '80px', left: '20px', bottom: 'auto', right: 'auto' },
+        { top: '50%', right: '16px', bottom: 'auto', left: 'auto' },
+        { top: '50%', left: '16px', bottom: 'auto', right: 'auto' },
+      ];
+      setChubbaPos(positions[Math.floor(Math.random() * positions.length)]);
+      setChubbaMsg(CHUBBA_MESSAGES[Math.floor(Math.random() * CHUBBA_MESSAGES.length)]);
+    };
+
+    const showTimer = setTimeout(() => {
+      randomize();
+      setShowChubbaPeek(true);
+    }, 3000);
+
+    const moveInterval = setInterval(() => {
+      setShowChubbaPeek(false);
+      setTimeout(() => {
+        randomize();
         setShowChubbaPeek(true);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
+      }, 600);
+    }, 8000);
+
+    return () => { clearTimeout(showTimer); clearInterval(moveInterval); };
   }, [entered]);
 
   // Assets
@@ -123,33 +161,77 @@ function App() {
             </div>
           </div>
 
-          {/* Chubba Peek (Z-50) */}
+          {/* Chubba Peek-a-boo — pops up at random spots */}
           <AnimatePresence>
             {showChubbaPeek && !activeModule && (
               <motion.div
-                className="fixed bottom-[110px] right-[20px] z-[50] flex flex-col items-end gap-2 cursor-pointer"
-                initial={{ y: 100, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: 20, opacity: 0 }}
-                transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+                key={chubbaMsg}
+                style={{
+                  position: 'fixed',
+                  ...chubbaPos,
+                  zIndex: 45,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '6px',
+                  cursor: 'pointer',
+                }}
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0, opacity: 0 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 15 }}
                 onClick={() => setActiveModule('chubba')}
               >
+                {/* Speech bubble */}
                 <motion.div
-                  className="bg-[#1E3A8A] text-white text-xs font-bold py-2 px-3 rounded-t-xl rounded-bl-xl shadow-lg relative"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1, rotate: [0, 5, -5, 0] }}
-                  transition={{ delay: 0.2, duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                  style={{
+                    padding: '6px 12px',
+                    borderRadius: '14px',
+                    background: 'rgba(255,255,255,0.85)',
+                    backdropFilter: 'blur(12px)',
+                    border: '1px solid rgba(255,255,255,0.6)',
+                    boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
+                    fontSize: '11px',
+                    fontWeight: '700',
+                    color: '#1E3A8A',
+                    whiteSpace: 'nowrap',
+                    position: 'relative',
+                  }}
+                  animate={{ rotate: [0, 3, -3, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 2 }}
                 >
-                  <span className="whitespace-nowrap">Oh? Chubba is here! {'>'}.{'<'}</span>
-                  <div className="absolute -bottom-1 right-2 w-3 h-3 bg-[#1E3A8A] rotate-45"></div>
+                  {chubbaMsg}
+                  <div style={{
+                    position: 'absolute',
+                    bottom: '-5px',
+                    left: '50%',
+                    transform: 'translateX(-50%) rotate(45deg)',
+                    width: '10px',
+                    height: '10px',
+                    background: 'rgba(255,255,255,0.85)',
+                    border: '1px solid rgba(255,255,255,0.6)',
+                    borderTop: 'none',
+                    borderLeft: 'none',
+                  }} />
                 </motion.div>
+
+                {/* Cat icon */}
                 <motion.div
-                  whileHover={{ scale: 1.2, translateY: -5 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="bg-white p-3 rounded-full shadow-md border border-[#32CD32] flex items-center justify-center"
-                  style={{ boxShadow: '0 0 10px #32CD32', position: 'relative', zIndex: 99999 }}
+                  whileHover={{ scale: 1.2, y: -4 }}
+                  whileTap={{ scale: 0.85 }}
+                  style={{
+                    padding: '10px',
+                    borderRadius: '50%',
+                    background: 'rgba(255,255,255,0.9)',
+                    backdropFilter: 'blur(12px)',
+                    border: '2px solid rgba(134,239,172,0.4)',
+                    boxShadow: '0 0 12px rgba(50,205,50,0.2), 0 4px 12px rgba(0,0,0,0.08)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
                 >
-                  <Cat size={28} color="#1F2937" />
+                  <Cat size={24} color="#1F2937" />
                 </motion.div>
               </motion.div>
             )}
