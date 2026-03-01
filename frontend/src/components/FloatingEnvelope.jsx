@@ -65,16 +65,20 @@ const FloatingEnvelope = () => {
 
         return (
             <AnimatePresence>
+                {/* Overlay to catch clicks outside if needed, optional but good for modals */}
+
                 <motion.div
                     initial={{ opacity: 0, scale: 0.8, x: isLeft ? -20 : 20 }}
                     animate={{ opacity: 1, scale: 1, x: 0 }}
                     style={{
+                        position: 'fixed',
                         top: '50%',
                         transform: 'translateY(-50%)',
                         left: isLeft ? '16px' : 'auto',
                         right: !isLeft ? '16px' : 'auto',
+                        zIndex: 60
                     }}
-                    className="fixed z-[60] w-[260px] bg-white rounded-xl shadow-2xl p-5 border-2 border-pink-200"
+                    className="w-[260px] bg-white rounded-xl shadow-2xl p-5 border-2 border-pink-200"
                 >
                     <div className="text-center relative">
                         {/* Close button */}
