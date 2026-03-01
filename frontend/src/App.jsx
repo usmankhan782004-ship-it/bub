@@ -9,6 +9,7 @@ import Iridescence from './components/Iridescence';
 import Gatekeeper from './components/Gatekeeper';
 import Dashboard from './components/Dashboard'; // Z-50
 import MemoryOverlay from './components/MemoryOverlay'; // Z-40
+import SecretEnvelope from './components/SecretEnvelope';
 
 import Gallery from './pages/Gallery';
 import About from './pages/About';
@@ -427,6 +428,13 @@ function App() {
             )}
 
           </MemoryOverlay>
+
+          {/* SURPRISE ENVELOPE (Z-50) */}
+          <AnimatePresence>
+            {activeModule === 'surprise' && (
+              <SecretEnvelope onClose={() => setActiveModule(null)} />
+            )}
+          </AnimatePresence>
 
           {/* FULL-SCREEN MUSIC PLAYER (Z-30) — Bypasses overlay for immersive experience */}
           <AnimatePresence>

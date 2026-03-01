@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Sparkles, Camera, Mail, Map, Music } from 'lucide-react';
+import { Sparkles, Camera, Mail, Map, Music, Gift } from 'lucide-react';
 
 const containerVariants = {
     hidden: { opacity: 0, y: 100 },
@@ -162,6 +162,13 @@ const Dashboard = ({ setActiveModule, activeModule }) => {
                     color="#FF69B4"
                     isActive={activeModule === 'music'}
                     onClick={() => handleClick('music')}
+                />
+                <DashboardTile
+                    icon={<Gift size={22} />}
+                    label="Surprise"
+                    color="#f43f5e"
+                    isActive={activeModule === 'surprise'}
+                    onClick={() => handleClick('surprise')}
                 />
             </div>
         </motion.nav>
