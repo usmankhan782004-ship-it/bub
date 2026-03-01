@@ -392,7 +392,7 @@ function App() {
              - Renders the active module inside a modal sheet
           */}
           <MemoryOverlay
-            isOpen={!!activeModule && activeModule !== 'music'}
+            isOpen={!!activeModule && activeModule !== 'music' && activeModule !== 'surprise'}
             onClose={() => setActiveModule(null)}
             title={activeModule}
           >
