@@ -61,12 +61,20 @@ const FloatingEnvelope = () => {
     };
 
     if (isOpen) {
+        const isLeft = parseInt(position.left) < 50;
+
         return (
             <AnimatePresence>
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[60] w-[300px] bg-white rounded-xl shadow-2xl p-6 border-2 border-pink-200"
+                    initial={{ opacity: 0, scale: 0.8, x: isLeft ? -20 : 20 }}
+                    animate={{ opacity: 1, scale: 1, x: 0 }}
+                    style={{
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        left: isLeft ? '16px' : 'auto',
+                        right: !isLeft ? '16px' : 'auto',
+                    }}
+                    className="fixed z-[60] w-[260px] bg-white rounded-xl shadow-2xl p-5 border-2 border-pink-200"
                 >
                     <div className="text-center relative">
                         {/* Close button */}
@@ -80,9 +88,9 @@ const FloatingEnvelope = () => {
                         <div className="flex justify-center mb-3">
                             <Sparkles className="text-pink-400" size={24} />
                         </div>
-                        <h3 className="text-lg font-bold text-pink-500 mb-2 font-serif">Happy Birthday!</h3>
+                        <h3 className="text-base font-bold text-pink-500 mb-2 font-serif">Happy Birthday!</h3>
 
-                        <div className="bg-pink-50 rounded-lg p-4 text-sm text-pink-900 leading-relaxed border border-pink-100 min-h-[120px] text-left font-serif text-[15px]">
+                        <div className="bg-pink-50 rounded-lg p-3 text-xs text-pink-900 leading-relaxed border border-pink-100 min-h-[100px] text-left font-serif">
                             {typedText.split('\n').map((line, i) => (
                                 <React.Fragment key={i}>
                                     {line}
@@ -90,7 +98,7 @@ const FloatingEnvelope = () => {
                                 </React.Fragment>
                             ))}
                             {typedText.length < fullText.length && (
-                                <span className="inline-block w-1 h-3.5 bg-pink-400 animate-pulse ml-0.5 align-middle" />
+                                <span className="inline-block w-1 h-3 bg-pink-400 animate-pulse ml-0.5 align-middle" />
                             )}
                         </div>
                     </div>
