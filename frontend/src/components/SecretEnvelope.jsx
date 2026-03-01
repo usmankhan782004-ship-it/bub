@@ -2,11 +2,10 @@ import React, { useEffect, useMemo, useState } from 'react';
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import { Heart, Gift, Sparkles, X } from 'lucide-react';
+import { Heart, Sparkles, X } from 'lucide-react';
 
 const SecretEnvelope = ({ onClose }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [showCard, setShowCard] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
@@ -17,72 +16,61 @@ const SecretEnvelope = ({ onClose }) => {
     }, []);
 
     const layout = useMemo(() => {
-        const width = isMobile ? 304 : 372;
-        const height = isMobile ? 206 : 236;
-        return {
-            envelopeWidth: width,
-            envelopeHeight: height,
-            flapHeight: Math.round(height * 0.56),
-            cardWidth: width - 24,
-            cardHeight: isMobile ? 246 : 286,
-            cardLift: isMobile ? -94 : -116,
-        };
+        const stageWidth = isMobile ? 320 : 420;
+        const stageHeight = isMobile ? 490 : 560;
+        const envelopeWidth = stageWidth - 24;
+        const envelopeHeight = isMobile ? 196 : 224;
+        const paperWidth = envelopeWidth - 18;
+        const paperHeight = isMobile ? 330 : 382;
+        return { stageWidth, stageHeight, envelopeWidth, envelopeHeight, paperWidth, paperHeight };
     }, [isMobile]);
 
-    const triggerConfetti = () => {
-        const endAt = Date.now() + 2200;
-        const base = {
-            spread: 64,
-            startVelocity: 32,
-            ticks: 80,
-            zIndex: 80,
-            colors: ['#f472b6', '#fb7185', '#fda4af', '#fbcfe8', '#93c5fd'],
-        };
-
+    const fireConfetti = () => {
+        const endAt = Date.now() + 1800;
         const timer = window.setInterval(() => {
-            const left = endAt - Date.now();
-            if (left <= 0) {
+            if (Date.now() >= endAt) {
                 window.clearInterval(timer);
                 return;
             }
-
-            const pct = left / 2200;
-            const count = Math.max(6, Math.floor(26 * pct));
-            confetti({ ...base, particleCount: count, origin: { x: 0.15, y: 0.22 } });
-            confetti({ ...base, particleCount: count, origin: { x: 0.85, y: 0.2 } });
-        }, 200);
+            confetti({
+                particleCount: 12,
+                spread: 56,
+                startVelocity: 28,
+                ticks: 75,
+                scalar: 0.95,
+                origin: { x: Math.random() < 0.5 ? 0.2 : 0.8, y: 0.2 },
+                colors: ['#f472b6', '#fb7185', '#93c5fd', '#f9a8d4'],
+                zIndex: 90,
+            });
+        }, 140);
     };
 
     const handleOpen = () => {
         if (isOpen) return;
         setIsOpen(true);
-        window.setTimeout(() => {
-            setShowCard(true);
-            triggerConfetti();
-        }, 520);
+        fireConfetti();
     };
 
     return (
         <motion.div
-            className="fixed inset-0 z-[70] flex items-center justify-center p-4"
+            className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-5"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             style={{
-                background: 'radial-gradient(circle at 20% 10%, rgba(244,114,182,0.18), transparent 34%), rgba(15, 23, 42, 0.78)',
-                backdropFilter: 'blur(14px)',
+                background: 'radial-gradient(circle at 20% 8%, rgba(251,191,219,0.45), rgba(245,243,255,0.9) 34%, rgba(224,231,255,0.95) 100%)',
+                backdropFilter: 'blur(6px)',
             }}
         >
             <motion.button
                 onClick={onClose}
-                className="absolute top-4 right-4 sm:top-6 sm:right-6 inline-flex items-center gap-2 px-3 py-2 rounded-full text-white"
+                className="absolute top-3 right-3 sm:top-5 sm:right-5 inline-flex items-center gap-2 px-3 py-2 rounded-full text-slate-700"
                 style={{
-                    background: 'rgba(255,255,255,0.14)',
-                    border: '1px solid rgba(255,255,255,0.28)',
-                    boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
-                    backdropFilter: 'blur(10px)',
+                    background: 'rgba(255,255,255,0.76)',
+                    border: '1px solid rgba(148,163,184,0.28)',
+                    boxShadow: '0 10px 28px rgba(30,41,59,0.14)',
                 }}
-                whileHover={{ scale: 1.03, backgroundColor: 'rgba(255,255,255,0.22)' }}
+                whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.97 }}
                 aria-label="Close surprise"
             >
@@ -91,127 +79,141 @@ const SecretEnvelope = ({ onClose }) => {
             </motion.button>
 
             <div
-                className="relative flex items-center justify-center cursor-pointer select-none"
-                style={{ width: layout.envelopeWidth + 30, height: layout.cardHeight + layout.envelopeHeight - 36 }}
+                className="relative select-none"
+                style={{ width: layout.stageWidth, height: layout.stageHeight }}
                 onClick={handleOpen}
             >
                 <motion.div
-                    className="absolute rounded-2xl overflow-hidden shadow-2xl"
+                    className="absolute left-1/2 -translate-x-1/2 rounded-2xl overflow-hidden"
                     style={{
-                        width: layout.envelopeWidth,
-                        height: layout.envelopeHeight,
-                        background: 'linear-gradient(135deg, #fde7f3 0%, #fbcfe8 56%, #f9c8de 100%)',
-                        border: '1px solid rgba(255,255,255,0.85)',
+                        width: layout.paperWidth,
+                        height: layout.paperHeight,
+                        top: isMobile ? 26 : 30,
+                        border: '1px solid rgba(244,114,182,0.28)',
+                        background: 'linear-gradient(180deg, #fff8fb 0%, #ffffff 100%)',
+                        boxShadow: '0 24px 45px rgba(99,102,241,0.16), inset 0 1px 0 rgba(255,255,255,0.8)',
                     }}
-                    initial={{ y: 26, scale: 0.97, rotateX: 8 }}
-                    animate={{ y: 0, scale: 1, rotateX: 0 }}
-                    transition={{ type: 'spring', stiffness: 220, damping: 22 }}
+                    initial={false}
+                    animate={{
+                        y: isOpen ? 0 : layout.paperHeight - 56,
+                        opacity: isOpen ? 1 : 0.97,
+                        scale: isOpen ? 1 : 0.985,
+                    }}
+                    transition={{ type: 'spring', stiffness: 135, damping: 20 }}
                 >
-                    <div className="absolute inset-0 bg-white/10" />
+                    <div className="h-full flex flex-col">
+                        <div
+                            className="px-5 py-4 text-center"
+                            style={{ background: 'linear-gradient(120deg, rgba(251,191,219,0.28), rgba(191,219,254,0.26))' }}
+                        >
+                            <p className="text-[10px] tracking-[0.24em] uppercase font-semibold text-rose-400">birthday letter</p>
+                            <h2 className="text-[20px] sm:text-[22px] leading-tight mt-1 font-bold text-rose-500">happy birthday, pretty girl</h2>
+                        </div>
 
-                    <motion.div
-                        className="absolute left-3 right-3 rounded-xl overflow-hidden"
-                        style={{
-                            bottom: 10,
-                            height: layout.cardHeight,
-                            zIndex: 14,
-                            background: 'linear-gradient(180deg, #fff7fb 0%, #ffffff 100%)',
-                            border: '1px solid rgba(226, 135, 176, 0.26)',
-                            boxShadow: '0 20px 30px rgba(15,23,42,0.14)',
-                        }}
-                        initial={{ y: '102%' }}
-                        animate={{ y: showCard ? layout.cardLift : '102%' }}
-                        transition={{ type: 'spring', stiffness: 135, damping: 20 }}
-                    >
-                        <div className="h-full flex flex-col">
-                            <div
-                                className="px-5 py-4 text-center"
-                                style={{ background: 'linear-gradient(120deg, rgba(244,114,182,0.16), rgba(147,197,253,0.16))' }}
-                            >
-                                <h2 className="text-[21px] leading-tight font-bold text-rose-500">Happy Birthday</h2>
-                                <p className="text-[13px] text-slate-600 mt-1">you are my favorite surprise, always</p>
-                            </div>
-
-                            <div className="px-5 py-4 flex-1">
-                                <div className="w-full h-full rounded-xl border border-rose-200/80 bg-rose-50/65 p-4 flex flex-col">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <span className="text-[10px] tracking-[0.2em] font-bold uppercase text-rose-400">Love Coupon</span>
-                                        <Gift size={16} className="text-rose-400" />
-                                    </div>
-                                    <p className="text-[13px] leading-relaxed text-rose-900">
-                                        One birthday dinner date, endless forehead kisses, and a real gift card of your choice.
-                                    </p>
-                                    <p className="text-[13px] leading-relaxed text-rose-900 mt-3">
-                                        no cap, life is better with you in it.
-                                    </p>
-                                    <div className="mt-auto pt-4 flex items-center justify-center gap-2 text-rose-500">
-                                        <Sparkles size={14} />
-                                        <span className="text-[11px] uppercase tracking-[0.18em] font-semibold">for my bub</span>
-                                        <Heart size={14} fill="currentColor" />
-                                    </div>
+                        <div className="px-5 py-4 flex-1">
+                            <div className="w-full h-full rounded-xl border border-rose-200 bg-rose-50/45 p-4 flex flex-col">
+                                <p className="text-[14px] leading-6 text-slate-700">
+                                    you make normal days feel special and chaotic days feel calm.
+                                </p>
+                                <p className="text-[14px] leading-6 text-slate-700 mt-3">
+                                    low-key still impressed i get to love someone this pretty and this real.
+                                </p>
+                                <p className="text-[14px] leading-6 text-slate-700 mt-3">
+                                    today is all yours. dinner, flowers, and one actual gift card of your choice.
+                                </p>
+                                <div className="mt-auto pt-4 flex items-center justify-center gap-2 text-rose-500">
+                                    <Sparkles size={14} />
+                                    <span className="text-[11px] tracking-[0.18em] uppercase font-semibold">for my bub</span>
+                                    <Heart size={14} fill="currentColor" />
                                 </div>
                             </div>
                         </div>
-                    </motion.div>
+                    </div>
+                </motion.div>
 
+                <motion.div
+                    className="absolute left-1/2 -translate-x-1/2 rounded-2xl overflow-hidden"
+                    style={{
+                        width: layout.envelopeWidth,
+                        height: layout.envelopeHeight,
+                        bottom: 22,
+                        border: '1px solid rgba(251,113,133,0.26)',
+                        background: 'linear-gradient(135deg, #fbd0e7 0%, #f9c4df 55%, #f8b9d8 100%)',
+                        boxShadow: '0 20px 42px rgba(236,72,153,0.2)',
+                    }}
+                >
                     <div
-                        className="absolute bottom-0 left-0 right-0 z-20"
+                        className="absolute inset-x-0 bottom-0"
                         style={{
-                            height: Math.round(layout.envelopeHeight * 0.48),
-                            background: 'linear-gradient(to top, #f5b8d6, #f8c5df)',
-                            clipPath: 'polygon(0 100%, 100% 100%, 100% 0, 50% -22%, 0 0)',
+                            height: '56%',
+                            background: 'linear-gradient(to top, #f4a8cf, #f7b9da)',
+                            clipPath: 'polygon(0 100%, 100% 100%, 100% 0, 50% -26%, 0 0)',
+                        }}
+                    />
+                    <div
+                        className="absolute inset-y-0 left-0 w-1/2"
+                        style={{
+                            background: 'linear-gradient(to right, rgba(248,183,216,0.94), rgba(248,183,216,0.5))',
+                            clipPath: 'polygon(0 0, 100% 50%, 0 100%)',
+                        }}
+                    />
+                    <div
+                        className="absolute inset-y-0 right-0 w-1/2"
+                        style={{
+                            background: 'linear-gradient(to left, rgba(248,183,216,0.94), rgba(248,183,216,0.5))',
+                            clipPath: 'polygon(100% 0, 0 50%, 100% 100%)',
                         }}
                     />
                 </motion.div>
 
                 <motion.div
-                    className="absolute z-30 pointer-events-none"
+                    className="absolute left-1/2 -translate-x-1/2 pointer-events-none"
                     style={{
-                        top: 2,
                         width: layout.envelopeWidth,
-                        height: layout.flapHeight,
-                        background: 'linear-gradient(to bottom, #fff4fa, #fde7f3)',
-                        clipPath: 'polygon(0 0, 100% 0, 50% 100%)',
+                        height: Math.round(layout.envelopeHeight * 0.55),
+                        bottom: layout.envelopeHeight + 22 - 1,
                         transformOrigin: 'top center',
-                        filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.1))',
+                        background: 'linear-gradient(to bottom, #fff1f9, #fde2f0)',
+                        clipPath: 'polygon(0 0, 100% 0, 50% 100%)',
+                        filter: 'drop-shadow(0 6px 12px rgba(0,0,0,0.08))',
                     }}
-                    initial={{ rotateX: 0 }}
-                    animate={{ rotateX: isOpen ? -178 : 0, zIndex: isOpen ? 8 : 30 }}
-                    transition={{ type: 'spring', stiffness: 160, damping: 18 }}
+                    initial={false}
+                    animate={{ rotateX: isOpen ? -172 : 0 }}
+                    transition={{ type: 'spring', stiffness: 170, damping: 18 }}
                 />
 
                 <AnimatePresence>
                     {!isOpen && (
                         <motion.div
-                            className="absolute z-40 flex items-center justify-center"
+                            className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
                             style={{
+                                bottom: layout.envelopeHeight + 8,
                                 width: isMobile ? 46 : 52,
                                 height: isMobile ? 46 : 52,
                                 borderRadius: '50%',
                                 background: 'radial-gradient(circle at 30% 30%, #ec4899, #be185d)',
-                                boxShadow: '0 8px 16px rgba(0,0,0,0.2), inset 0 2px 3px rgba(255,255,255,0.38)',
+                                boxShadow: '0 8px 18px rgba(190,24,93,0.3), inset 0 2px 4px rgba(255,255,255,0.36)',
                             }}
-                            initial={{ scale: 0.8, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.7, opacity: 0 }}
-                            whileHover={{ scale: 1.07 }}
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.8 }}
                         >
-                            <Heart size={18} fill="rgba(255,255,255,0.65)" color="white" />
+                            <Heart size={18} fill="rgba(255,255,255,0.7)" color="white" />
                         </motion.div>
                     )}
                 </AnimatePresence>
 
                 <AnimatePresence>
                     {!isOpen && (
-                        <motion.div
-                            className="absolute -bottom-10 text-rose-100/90 text-xs uppercase tracking-[0.22em] font-semibold"
+                        <motion.p
+                            className="absolute left-1/2 -translate-x-1/2 text-xs uppercase tracking-[0.2em] font-semibold text-rose-500/80"
+                            style={{ bottom: 0 }}
                             initial={{ opacity: 0, y: 8 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 4 }}
-                            transition={{ duration: 0.35 }}
                         >
                             tap to open
-                        </motion.div>
+                        </motion.p>
                     )}
                 </AnimatePresence>
             </div>
