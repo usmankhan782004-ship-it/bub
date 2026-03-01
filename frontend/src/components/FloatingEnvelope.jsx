@@ -6,22 +6,49 @@ import confetti from 'canvas-confetti';
 const FloatingEnvelope = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [position, setPosition] = useState({ top: '20%', left: '15%' });
-
-    // Floating effect
+    const [typedText, setTypedText] = useState('');
+    const fullText = "Happy birthday, Bub. I just wanted to say that I genuinely love you so much. You make my life brighter every day. You're the best thing that ever happened to me.\n\nLove, Max";
+    // Floating effect along the sides
     useEffect(() => {
         if (isOpen) return;
 
         const interval = setInterval(() => {
-            // Pick a random top-half position so it doesn't block the dashboard
-            const newTop = Math.floor(Math.random() * 40) + 15 + '%';
-            const newLeft = Math.floor(Math.random() * 80) + 10 + '%';
+            // Keep it on the sides (left < 20% or right > 80%)
+            const isLeft = Math.random() > 0.5;
+            const newLeft = isLeft
+                ? Math.floor(Math.random() * 15) + 5 + '%'
+                : Math.floor(Math.random() * 15) + 80 + '%';
+
+            const newTop = Math.floor(Math.random() * 60) + 15 + '%';
             setPosition({ top: newTop, left: newLeft });
         }, 8000);
 
         return () => clearInterval(interval);
     }, [isOpen]);
 
+    // Typewriter effect
+    useEffect(() => {
+        if (!isOpen) return;
+
+        let i = 0;
+        const typingInterval = setInterval(() => {
+            if (i < fullText.length) {
+                setTypedText(prev => prev + fullText.charAt(i));
+                i++;
+            } else {
+                clearInterval(typingInterval);
+            }
+        }, 50);
+
+        return () => clearInterval(typingInterval);
+    }, [isOpen]);
+
     const handleOpen = () => {
+        // Play pop sound
+        const audio = new Audio('/assets/pop.mp3');
+        audio.volume = 0.5;
+        audio.play().catch(e => console.log('Audio play failed:', e));
+
         setIsOpen(true);
         confetti({
             particleCount: 80,
@@ -55,12 +82,16 @@ const FloatingEnvelope = () => {
                         </div>
                         <h3 className="text-lg font-bold text-pink-500 mb-2 font-serif">Happy Birthday!</h3>
 
-                        <div className="bg-pink-50 rounded-lg p-3 text-sm text-pink-900 leading-snug border border-pink-100">
-                            <p className="mb-2">You are my favorite surprise. 💖</p>
-                            <div className="flex items-center justify-center gap-1 text-xs font-bold uppercase tracking-wider text-pink-400 mt-2 mb-1">
-                                <Gift size={12} /> Love Coupon
-                            </div>
-                            <p className="text-xs">Good for ONE unforgettable birthday dinner, endless kisses, and a real gift card of your choice!</p>
+                        <div className="bg-pink-50 rounded-lg p-4 text-sm text-pink-900 leading-relaxed border border-pink-100 min-h-[120px] text-left font-serif text-[15px]">
+                            {typedText.split('\n').map((line, i) => (
+                                <React.Fragment key={i}>
+                                    {line}
+                                    {i < typedText.split('\n').length - 1 && <br />}
+                                </React.Fragment>
+                            ))}
+                            {typedText.length < fullText.length && (
+                                <span className="inline-block w-1 h-3.5 bg-pink-400 animate-pulse ml-0.5 align-middle" />
+                            )}
                         </div>
                     </div>
                 </motion.div>
