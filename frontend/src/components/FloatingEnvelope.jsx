@@ -70,7 +70,7 @@ const FloatingEnvelope = () => {
 
     return (
         <motion.div
-            className="fixed z-[60] cursor-pointer"
+            className="fixed z-[60] cursor-pointer flex flex-col items-center gap-1.5"
             animate={{
                 top: position.top,
                 left: position.left,
@@ -85,26 +85,56 @@ const FloatingEnvelope = () => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
         >
-            <div className="relative w-16 h-12 perspective-1000">
-                {/* Envelope Back */}
-                <div className="absolute inset-0 bg-pink-300 rounded-md shadow-lg" />
+            {/* Speech bubble */}
+            <motion.div
+                style={{
+                    padding: '4px 10px',
+                    borderRadius: '12px',
+                    background: 'rgba(255,255,255,0.9)',
+                    backdropFilter: 'blur(12px)',
+                    border: '1px solid rgba(244,114,182,0.4)',
+                    boxShadow: '0 4px 12px rgba(244,114,182,0.15)',
+                    fontSize: '10px',
+                    fontWeight: '700',
+                    color: '#ec4899', // pink-500
+                    whiteSpace: 'nowrap',
+                    position: 'relative',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em'
+                }}
+                animate={{ rotate: [0, 2, -2, 0] }}
+                transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+            >
+                Open me
+                <div style={{
+                    position: 'absolute',
+                    bottom: '-4px',
+                    left: '50%',
+                    transform: 'translateX(-50%) rotate(45deg)',
+                    width: '8px',
+                    height: '8px',
+                    background: 'rgba(255,255,255,0.9)',
+                    border: '1px solid rgba(244,114,182,0.4)',
+                    borderTop: 'none',
+                    borderLeft: 'none',
+                }} />
+            </motion.div>
 
-                {/* Envelope Flap */}
-                <div className="absolute top-0 left-0 w-full h-[60%] bg-pink-200 origin-top transform rotate-x-0"
-                    style={{ clipPath: 'polygon(0 0, 100% 0, 50% 100%)' }} />
-
-                {/* Wax Seal */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center shadow-md">
-                    <Heart size={8} className="text-white" fill="white" />
-                </div>
-
-                <motion.div
-                    className="absolute -bottom-6 w-full text-center text-[9px] font-bold text-pink-500 tracking-wider uppercase bg-white/50 backdrop-blur-sm rounded-full py-0.5 pointer-events-none"
-                    animate={{ opacity: [0.5, 1, 0.5] }}
-                    transition={{ repeat: Infinity, duration: 2 }}
-                >
-                    Open me
-                </motion.div>
+            {/* Bubble Icon */}
+            <div
+                style={{
+                    padding: '12px',
+                    borderRadius: '50%',
+                    background: 'rgba(255,255,255,0.9)',
+                    backdropFilter: 'blur(12px)',
+                    border: '2px solid rgba(244,114,182,0.6)',
+                    boxShadow: '0 0 16px rgba(244,114,182,0.25), 0 4px 12px rgba(0,0,0,0.06)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
+                <Gift size={22} color="#ec4899" />
             </div>
         </motion.div>
     );
