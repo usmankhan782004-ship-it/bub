@@ -20,18 +20,19 @@ const SecretEnvelope = ({ onClose }) => {
     }, []);
 
     const layout = useMemo(() => {
-        const stageWidth = isMobile ? 320 : 420;
-        const stageHeight = isMobile ? 490 : 560;
+        const maxWidth = Math.min(420, viewport.width - 20);
+        const stageWidth = Math.max(isMobile ? 290 : 320, maxWidth);
+        const stageHeight = Math.round(stageWidth * 1.33);
         const envelopeWidth = stageWidth - 24;
         const envelopeHeight = isMobile ? 196 : 224;
         const paperWidth = envelopeWidth - 18;
         const paperHeight = isMobile ? 330 : 382;
         return { stageWidth, stageHeight, envelopeWidth, envelopeHeight, paperWidth, paperHeight };
-    }, [isMobile]);
+    }, [isMobile, viewport.width]);
     const stageScale = Math.min(
         1,
-        (viewport.width - 24) / layout.stageWidth,
-        (viewport.height - 96) / layout.stageHeight
+        (viewport.width - 16) / layout.stageWidth,
+        (viewport.height - 132) / layout.stageHeight
     );
 
     const fireConfetti = () => {
@@ -94,7 +95,7 @@ const SecretEnvelope = ({ onClose }) => {
                     height: layout.stageHeight,
                     transform: `scale(${stageScale})`,
                     transformOrigin: 'center center',
-                    perspective: 1200,
+                    perspective: 900,
                 }}
                 onClick={handleOpen}
             >
@@ -188,14 +189,15 @@ const SecretEnvelope = ({ onClose }) => {
                         height: Math.round(layout.envelopeHeight * 0.55),
                         bottom: layout.envelopeHeight + 22 - 1,
                         transformOrigin: 'top center',
+                        transformStyle: 'preserve-3d',
                         background: 'linear-gradient(to bottom, #fff1f9, #fde2f0)',
                         clipPath: 'polygon(0 0, 100% 0, 50% 100%)',
                         filter: 'drop-shadow(0 6px 12px rgba(0,0,0,0.08))',
                         backfaceVisibility: 'hidden',
                     }}
                     initial={false}
-                    animate={{ rotateX: isOpen ? 172 : 0 }}
-                    transition={{ type: 'spring', stiffness: 170, damping: 18 }}
+                    animate={{ rotateX: isOpen ? 158 : 0, y: isOpen ? -3 : 0 }}
+                    transition={{ type: 'spring', stiffness: 120, damping: 21 }}
                 />
 
                 <AnimatePresence>
