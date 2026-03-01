@@ -7,9 +7,13 @@ import { Heart, Sparkles, X } from 'lucide-react';
 const SecretEnvelope = ({ onClose }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+    const [viewport, setViewport] = useState({ width: 390, height: 844 });
 
     useEffect(() => {
-        const sync = () => setIsMobile(window.innerWidth <= 430);
+        const sync = () => {
+            setIsMobile(window.innerWidth <= 430);
+            setViewport({ width: window.innerWidth, height: window.innerHeight });
+        };
         sync();
         window.addEventListener('resize', sync);
         return () => window.removeEventListener('resize', sync);
@@ -24,6 +28,11 @@ const SecretEnvelope = ({ onClose }) => {
         const paperHeight = isMobile ? 330 : 382;
         return { stageWidth, stageHeight, envelopeWidth, envelopeHeight, paperWidth, paperHeight };
     }, [isMobile]);
+    const stageScale = Math.min(
+        1,
+        (viewport.width - 24) / layout.stageWidth,
+        (viewport.height - 96) / layout.stageHeight
+    );
 
     const fireConfetti = () => {
         const endAt = Date.now() + 1800;
@@ -80,7 +89,13 @@ const SecretEnvelope = ({ onClose }) => {
 
             <div
                 className="relative select-none"
-                style={{ width: layout.stageWidth, height: layout.stageHeight }}
+                style={{
+                    width: layout.stageWidth,
+                    height: layout.stageHeight,
+                    transform: `scale(${stageScale})`,
+                    transformOrigin: 'center center',
+                    perspective: 1200,
+                }}
                 onClick={handleOpen}
             >
                 <motion.div
@@ -176,9 +191,10 @@ const SecretEnvelope = ({ onClose }) => {
                         background: 'linear-gradient(to bottom, #fff1f9, #fde2f0)',
                         clipPath: 'polygon(0 0, 100% 0, 50% 100%)',
                         filter: 'drop-shadow(0 6px 12px rgba(0,0,0,0.08))',
+                        backfaceVisibility: 'hidden',
                     }}
                     initial={false}
-                    animate={{ rotateX: isOpen ? -172 : 0 }}
+                    animate={{ rotateX: isOpen ? 172 : 0 }}
                     transition={{ type: 'spring', stiffness: 170, damping: 18 }}
                 />
 
