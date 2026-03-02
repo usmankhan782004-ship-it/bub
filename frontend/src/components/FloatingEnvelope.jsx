@@ -52,6 +52,7 @@ const FloatingEnvelope = () => {
         audio.volume = 0.5;
         audio.play().catch(e => console.log('Audio play failed:', e));
 
+        setIsOpen(true);
         confetti({
             particleCount: 80,
             spread: 70,
