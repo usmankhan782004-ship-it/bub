@@ -70,6 +70,7 @@ const FloatingEnvelope = () => {
                 <motion.div
                     key="closed-bubble"
                     className="fixed z-[60] cursor-pointer flex flex-col items-center gap-1.5"
+                    style={{ position: 'fixed', top: position.top, left: position.left }}
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{
                         opacity: 1,
@@ -144,9 +145,13 @@ const FloatingEnvelope = () => {
                     initial={{ opacity: 0, scale: 0.8, x: isLeft ? -50 : 50 }}
                     animate={{ opacity: 1, scale: 1, x: 0 }}
                     exit={{ opacity: 0, scale: 0.8, x: isLeft ? -50 : 50, transition: { duration: 0.2 } }}
-                    className={`fixed z-[60] top-1/2 -translate-y-1/2 ${isLeft ? 'left-6' : 'right-6'} flex flex-col items-center`}
+                    className="fixed z-[60] top-1/2 -translate-y-1/2 flex flex-col items-center"
+                    style={{
+                        left: isLeft ? '1.5rem' : 'auto',
+                        right: !isLeft ? '1.5rem' : 'auto'
+                    }}
                 >
-                    <div className="w-[280px] bg-pink-50 rounded-2xl shadow-xl p-6 border-2 border-pink-300 relative"
+                    <div className="w-[85vw] max-w-[280px] bg-pink-50 rounded-2xl shadow-xl p-6 border-2 border-pink-300 relative"
                         style={{ boxShadow: '0 10px 25px -5px rgba(244, 114, 182, 0.4)' }}>
                         {/* Letter decorative lines */}
                         <div className="absolute top-0 left-0 w-full h-8 overflow-hidden rounded-t-xl opacity-30 pointer-events-none">
