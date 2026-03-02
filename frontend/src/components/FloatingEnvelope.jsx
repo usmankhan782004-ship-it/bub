@@ -143,21 +143,22 @@ const FloatingEnvelope = () => {
             ) : (
                 <motion.div
                     key="open-letter"
-                    initial={{ opacity: 0, scale: 0.8, x: isLeft ? -50 : 50 }}
+                    initial={{ opacity: 0, scale: 0.8, x: 50 }}
                     animate={{ opacity: 1, scale: 1, x: 0 }}
-                    exit={{ opacity: 0, scale: 0.8, x: isLeft ? -50 : 50, transition: { duration: 0.2 } }}
+                    exit={{ opacity: 0, scale: 0.8, x: 50, transition: { duration: 0.2 } }}
                     className="fixed z-[60] top-1/2 -translate-y-1/2 flex flex-col items-center"
                     style={{
-                        left: isLeft ? '1.5rem' : 'auto',
-                        right: !isLeft ? '1.5rem' : 'auto'
+                        right: '1.5rem',
+                        left: 'auto'
                     }}
                 >
-                    <div className="w-[85vw] max-w-[280px] bg-pink-50 rounded-2xl shadow-xl p-6 border-2 border-pink-300 relative"
-                        style={{ boxShadow: '0 10px 25px -5px rgba(244, 114, 182, 0.4)' }}>
-                        {/* Letter decorative lines */}
-                        <div className="absolute top-0 left-0 w-full h-8 overflow-hidden rounded-t-xl opacity-30 pointer-events-none">
-                            <div className="w-full h-[3px] bg-pink-400 mb-[4px]" />
-                            <div className="w-full h-[1px] bg-pink-300" />
+                    <div className="w-[85vw] max-w-[280px] bg-pink-50 rounded-3xl shadow-2xl p-6 border-4 border-pink-300 relative overflow-hidden"
+                        style={{ boxShadow: '0 10px 30px -5px rgba(244, 114, 182, 0.5), 0 0 15px rgba(244, 114, 182, 0.2)' }}>
+                        {/* Letter decorative kawaii pattern top */}
+                        <div className="absolute top-0 left-0 w-full h-10 opacity-40 pointer-events-none flex flex-col">
+                            <div className="w-full h-[6px] bg-pink-400 mb-[4px]" />
+                            <div className="w-full h-[2px] bg-pink-300 mb-[2px]" />
+                            <div className="w-full h-[1px] bg-pink-200" />
                         </div>
 
                         {/* Gift Icon inside the letter at the top! */}
