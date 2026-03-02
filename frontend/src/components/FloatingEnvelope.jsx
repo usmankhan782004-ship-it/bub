@@ -128,18 +128,13 @@ const FloatingEnvelope = () => {
                 >
                     {/* The Kawaii Book Page / Letter Panel */}
                     <div
-                        className="w-[260px] h-[340px] bg-[#fffdfa] rounded-r-xl rounded-l-md shadow-2xl relative overflow-hidden flex flex-col"
+                        className="w-[260px] h-[360px] max-h-[60vh] bg-pink-50 rounded-r-xl rounded-l-md shadow-2xl relative overflow-hidden flex flex-col"
                         style={{
                             boxShadow: '8px 12px 30px rgba(244, 114, 182, 0.4), inset 4px 0 10px rgba(0,0,0,0.03)',
                             border: '1px solid #fce7f3',
                             borderLeft: '4px solid #f472b6' // Book spine effect
                         }}
                     >
-                        {/* Cutout / Book page lines effect background */}
-                        <div className="absolute inset-0 pointer-events-none opacity-[0.4]" style={{
-                            backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, #fbcfe8 27px, #fbcfe8 28px)',
-                            backgroundPositionY: '50px'
-                        }} />
 
                         {/* Gift Icon inside the letter at the top left like a stamp */}
                         <div className="absolute top-3 right-3 z-10 flex justify-center opacity-80">
@@ -164,8 +159,8 @@ const FloatingEnvelope = () => {
                         </h3>
 
                         {/* Scrollable letter body */}
-                        <div className="flex-1 overflow-y-auto px-5 pb-5 z-10 custom-scrollbar">
-                            <div className="text-[13px] text-pink-900 leading-[28px] font-serif text-left">
+                        <div className="flex-1 overflow-y-auto px-5 pb-5 z-10 custom-scrollbar mt-1">
+                            <div className="text-[13px] text-pink-900 leading-[24px] font-serif text-left">
                                 {typedText.split('\n').map((line, i) => (
                                     <React.Fragment key={i}>
                                         {line}
